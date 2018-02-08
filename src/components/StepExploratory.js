@@ -121,6 +121,7 @@ const StepExploratory = ({
             return ('');
           }
           let content = '';
+          let content2 = '';
           if (yvarType === 'real' || yvarType === 'integer') {
             if (d.colType === 'real' || d.colType === 'integer') {
               content = (
@@ -168,12 +169,21 @@ const StepExploratory = ({
               );
             }
           }
+          // console.log(content.props)
+          // if the plot returned '', don't have a header
+          if (typeof content !== 'string') {
+            content2 = (
+              <div>
+                <Typography variant="headline" className={classes.title}>
+                  {d.colName}
+                </Typography>
+                {content}
+              </div>
+            );
+          }
           return (
             <div key={`container-${d.colName}`} className={classes.plotContainer}>
-              <Typography variant="headline" className={classes.title}>
-                {d.colName}
-              </Typography>
-              {content}
+              {content2}
             </div>
           );
         })}

@@ -25,7 +25,9 @@ const BoxPlot = ({
       });
     });
     dat.sort((a, b) => (b.n > a.n ? 1 : b.n < a.n ? -1 : 0));
-    // const n = dat.length;
+    // if ((dat.length / data.length) > 0.95) {
+    //   return ('');
+    // }
     const dats = dat.slice(0, 15);
 
     /* eslint-disable */
@@ -66,8 +68,8 @@ const BoxPlot = ({
       ],
 
       "axes": [
-        {"orient": "bottom", "scale": "xscale", "zindex": 1, "title": xField},
-        {"orient": "left", "scale": "yscale", "tickCount": 5, "zindex": 1, "title": yField}
+        {"orient": "bottom", "scale": "xscale", "zindex": 1, "title": yField},
+        {"orient": "left", "scale": "yscale", "tickCount": 5, "zindex": 1, "title": xField}
       ],
 
       "marks": [
@@ -106,7 +108,7 @@ const BoxPlot = ({
           "from": {"data": "table"},
           "encode": {
             "enter": {
-              "fill": {"value": "aliceblue"},
+              "fill": {"value": "black"},
               "width": {"value": 2}
             },
             "update": {
@@ -135,7 +137,9 @@ const BoxPlot = ({
       });
     });
     dat.sort((a, b) => (b.n > a.n ? 1 : b.n < a.n ? -1 : 0));
-    // const n = dat.length;
+    // if ((dat.length / data.length) > 0.95) {
+    //   return ('');
+    // }
     const dats = dat.slice(0, 15);
 
     /* eslint-disable */
@@ -176,8 +180,8 @@ const BoxPlot = ({
       ],
 
       "axes": [
-        {"orient": "left", "scale": "yscale", "zindex": 1, "title": xField},
-        {"orient": "bottom", "scale": "xscale", "tickCount": 5, "zindex": 1, "title": yField}
+        {"orient": "left", "scale": "yscale", "zindex": 1, "title": yField},
+        {"orient": "bottom", "scale": "xscale", "tickCount": 5, "zindex": 1, "title": xField}
       ],
 
       "marks": [
@@ -216,7 +220,7 @@ const BoxPlot = ({
           "from": {"data": "table"},
           "encode": {
             "enter": {
-              "fill": {"value": "aliceblue"},
+              "fill": {"value": "black"},
               "height": {"value": 2}
             },
             "update": {

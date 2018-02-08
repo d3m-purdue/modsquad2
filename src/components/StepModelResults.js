@@ -10,7 +10,7 @@ import Typography from 'material-ui/Typography';
 import { LinearProgress } from 'material-ui/Progress';
 
 import Scatter from './PlotScatter';
-// import BoxPlot from './PlotBox';
+import BoxPlot from './PlotBox';
 // import CatHeatmap from './PlotCatHeatmap';
 
 const styles = theme => ({
@@ -62,7 +62,7 @@ class StepModelResults extends React.Component {
     selected: 0
   };
 
-  handleSelect = event => () => {
+  handleSelect = (event) => {
     this.setState({
       selected: event.target.value
     });
@@ -110,16 +110,44 @@ class StepModelResults extends React.Component {
       data[i].Predicted = parseFloat(datLookup[i]);
       data[i].Residual = parseFloat(data[i][yvar]) - data[i].Predicted;
     }
-    const plot = (
-      <Scatter
-        data={data}
-        xField={yvar}
-        yField="Residual"
-        width={600}
-        height={400}
-      />
-    );
 
+    const plots = (
+      <div>
+        {this.props.meta.slice(1).map((d) => {
+          let content = '';
+          if (d.colType === 'real' || d.colType === 'integer') {
+            content = (
+              <Scatter
+                data={data}
+                xField={d.colName}
+                yField="Residual"
+                width={600}
+                height={400}
+              />
+            );
+          } else if (d.colType === 'categorical') {
+            content = (
+              <BoxPlot
+                data={data}
+                xField={d.colName}
+                yField="Residual"
+                yCat={false}
+                width={600}
+                height={400}
+              />
+            );
+          }
+          return (
+            <div className={classes.plotContainer}>
+              <Typography variant="headline" className={classes.title}>
+                {d.colName}
+              </Typography>
+              {content}
+            </div>
+          );
+        })}
+      </div>
+    );
     return (
       <div className={classes.root}>
         <Typography variant="headline" className={classes.title}>
@@ -152,7 +180,7 @@ class StepModelResults extends React.Component {
           </FormControl>
         </form>
         <div className={classes.plotContainer}>
-          {plot}
+          {plots}
         </div>
       </div>
     );
@@ -162,6 +190,7 @@ class StepModelResults extends React.Component {
 StepModelResults.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
+  meta: PropTypes.array.isRequired,
   pdata: PropTypes.object.isRequired,
   problems: PropTypes.array.isRequired
 };
@@ -170,6 +199,7 @@ const mapStateToProps = state => (
   {
     data: state.activeData.data,
     pdata: state.executedPipelines,
+    meta: state.metadata.data,
     problems: state.problems.data
   }
 );

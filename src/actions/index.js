@@ -237,3 +237,22 @@ export const getPipelinePredictions = (state, dispatch) => {
     return null;
   });
 };
+
+export const exportPipeline = (pipelineId, state) => {
+  const context = state.ta2session.context.sessionId;
+
+  const params = {
+    context,
+    pipeline: pipelineId
+  };
+
+  const query = [];
+  Object.entries(params).forEach(d => query.push(`${d[0]}=${d[1]}`));
+
+  const url = `/pipeline/export?${query.join('&')}`;
+
+  json(url).post({}, (resp) => {
+    console.log('export pipeline response:');
+    console.log(resp);
+  });
+};

@@ -15,7 +15,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 import ModelTableToolbar from './ModelTableToolbar';
 import ModelTableHead from './ModelTableHead';
-import { setSelectedPipelines } from '../actions';
+import { setSelectedPipelines, exportPipeline } from '../actions';
 
 const styles = theme => ({
   root: {
@@ -39,8 +39,6 @@ class ModelTable extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    // const dat = [{"progressInfo":"COMPLETED","pipelineId":"L867B8NJITYP87EO01QP","responseInfo":{"status":{"code":"OK","details":"Completed pipeline L867B8NJITYP87EO01QP; cv score: 0.933, 0.008"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/L867B8NJITYP87EO01QP-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9329187273979187}]}},{"progressInfo":"COMPLETED","pipelineId":"U7C2IUY7BFNA20CKO2G2","responseInfo":{"status":{"code":"OK","details":"Completed pipeline U7C2IUY7BFNA20CKO2G2; cv score: 0.927, 0.004"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/U7C2IUY7BFNA20CKO2G2-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9273164868354797}]}},{"progressInfo":"COMPLETED","pipelineId":"I6VLZP7GW5DZ4OTFWVOP","responseInfo":{"status":{"code":"OK","details":"Completed pipeline I6VLZP7GW5DZ4OTFWVOP; cv score: 0.932, 0.009"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/I6VLZP7GW5DZ4OTFWVOP-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9319902658462524}]}},{"progressInfo":"COMPLETED","pipelineId":"3J5D0E85N4UR4OVKPYCY","responseInfo":{"status":{"code":"OK","details":"Completed pipeline 3J5D0E85N4UR4OVKPYCY; cv score: 0.935, 0.008"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/3J5D0E85N4UR4OVKPYCY-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9347809553146362}]}},{"progressInfo":"COMPLETED","pipelineId":"0CUCVAZME1HJ8DMHKFZ4","responseInfo":{"status":{"code":"OK","details":"Completed pipeline 0CUCVAZME1HJ8DMHKFZ4; cv score: 0.935, 0.007"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/0CUCVAZME1HJ8DMHKFZ4-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9347809553146362}]}},{"progressInfo":"COMPLETED","pipelineId":"CL6KFA1MPHR550PSNN1K","responseInfo":{"status":{"code":"OK","details":"Completed pipeline CL6KFA1MPHR550PSNN1K; cv score: 0.931, 0.007"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/CL6KFA1MPHR550PSNN1K-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9310513138771057}]}},{"progressInfo":"COMPLETED","pipelineId":"VHHZBL1OAQOV5ZLACPAE","responseInfo":{"status":{"code":"OK","details":"Completed pipeline VHHZBL1OAQOV5ZLACPAE; cv score: 0.934, 0.005"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/VHHZBL1OAQOV5ZLACPAE-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9338420629501343}]}},{"progressInfo":"COMPLETED","pipelineId":"UD4BVJYPCCCY3ICOTN0A","responseInfo":{"status":{"code":"OK","details":"Completed pipeline UD4BVJYPCCCY3ICOTN0A; cv score: 0.933, 0.008"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/UD4BVJYPCCCY3ICOTN0A-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9329187273979187}]}},{"progressInfo":"COMPLETED","pipelineId":"F5V02ZPFJ94348LE9L3Z","responseInfo":{"status":{"code":"OK","details":"Completed pipeline F5V02ZPFJ94348LE9L3Z; cv score: 0.931, 0.007"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/F5V02ZPFJ94348LE9L3Z-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9310513138771057}]}},{"progressInfo":"COMPLETED","pipelineId":"COQ9RD4UQE6BHHWEY9A8","responseInfo":{"status":{"code":"OK","details":"Completed pipeline COQ9RD4UQE6BHHWEY9A8; cv score: 0.934, 0.006"}},"pipelineInfo":{"predictResultUri":"file:///writable/temp/COQ9RD4UQE6BHHWEY9A8-train_preds.csv","scores":[{"metric":"ROC_AUC","value":0.9338420629501343}]}}];
-
     const dat = props.data;
 
     const rocs = dat.map(d => d.pipelineInfo.scores[0].value);
@@ -58,7 +56,12 @@ class ModelTable extends React.Component {
         ROC_AUC: d.pipelineInfo.scores[0].value,
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: (
-          <Button size="small" color="primary" variant="raised">
+          <Button
+            size="small"
+            color="primary"
+            variant="raised"
+            onClick={() => this.props.handleExport(d.pipelineId, this.props.state)}
+          >
             Export
           </Button>)
       });
@@ -207,20 +210,26 @@ class ModelTable extends React.Component {
 ModelTable.propTypes = {
   classes: PropTypes.object.isRequired,
   selectedPipelines: PropTypes.array.isRequired,
+  state: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleExport: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => (
   {
-    selectedPipelines: state.selectedPipelines
+    selectedPipelines: state.selectedPipelines,
+    state
   }
 );
 
 const mapDispatchToProps = dispatch => ({
   handleChange: (val) => {
-    console.log(val);
+    // console.log(val);
     dispatch(setSelectedPipelines(val));
+  },
+  handleExport: (pipelineId, state) => {
+    exportPipeline(pipelineId, state);
   }
 });
 
