@@ -1,0 +1,44 @@
+{
+  "name": "modsquad2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "d3-array": "^1.2.1",
+    "d3-request": "^1.0.6",
+    "lodash.countby": "^4.6.0",
+    "lodash.filter": "^4.6.0",
+    "lodash.groupby": "^4.6.0",
+    "lodash.map": "^4.6.0",
+    "material-ui": "^1.0.0-beta.32",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.1.0",
+    "react-vega": "^3.1.2",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
+    "typeface-open-sans": "^0.0.54",
+    "vega": "^3.0.10"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer build/static/js/main.*"
+  },
+  "proxy": "http://localhost:8080",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
+    "source-map-explorer": "^1.5.0"
+  }
+}
