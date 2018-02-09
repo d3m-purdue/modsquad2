@@ -140,7 +140,7 @@ const StepVariables = ({
               <Histogram
                 data={data}
                 field={variable}
-                width={330}
+                width={310}
                 height={300}
                 // className={classes.numLeft}
               />
@@ -152,7 +152,7 @@ const StepVariables = ({
               <QQ
                 data={data}
                 field={variable}
-                width={330}
+                width={310}
                 height={280}
                 // className={classes.numRight}
               />
@@ -168,7 +168,7 @@ const StepVariables = ({
             <Barchart
               data={data}
               field={variable}
-              width={650}
+              width={620}
               height={300}
             />
           </div>
@@ -201,7 +201,7 @@ const StepVariables = ({
 
           content = (
             <div
-              style={{ width: 680, height: window.innerHeight - 230, marginLeft: -30 }}
+              style={{ width: 720, height: window.innerHeight - 230, marginLeft: -30 }}
               ref={(input) => {
                 // need to do some special things to append trelliscope
                 // when it mounts, append trelliscope display
@@ -214,7 +214,7 @@ const StepVariables = ({
                 } else {
                   const node = document.createElement('div');
                   node.id = 'TRELLISCOPEWRAPPER';
-                  node.style = `width:680px;height:${window.innerHeight - 230}px;marginLeft:-30px`;
+                  node.style = `width:720px;height:${window.innerHeight - 230}px;marginLeft:-30px`;
                   document.getElementById('trellisContainer').appendChild(node);
                   window.trelliscopeApp('TRELLISCOPEWRAPPER', config);
                 }
