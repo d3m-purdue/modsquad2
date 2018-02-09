@@ -93,7 +93,9 @@ const styles = theme => ({
   }
 });
 
-const StepVariables = ({ classes, data, meta, variable, handleClick }) => {
+const StepVariables = ({
+  classes, data, meta, variable, handleClick
+}) => {
   if (data.length === 0 || meta.length === 0) {
     // TODO: loading indicator
   }
@@ -195,8 +197,24 @@ const StepVariables = ({ classes, data, meta, variable, handleClick }) => {
           content = (
             <div
               style={{ width: 680, height: window.innerHeight - 230, marginLeft: -30 }}
-              ref={() => { window.trelliscopeApp('asdfasdf', config); }}
-              id="asdfasdf"
+              ref={(input) => {
+                // need to do some special things to append trelliscope
+                // when it mounts, append trelliscope display
+                // when it unmounts, destroy DOM node (since React isn't aware of it)
+                if (input === null) { // this is unmounting
+                  const el = document.getElementById('TRELLISCOPEWRAPPER');
+                  if (el !== null) {
+                    el.remove();
+                  }
+                } else {
+                  const node = document.createElement('div');
+                  node.id = 'TRELLISCOPEWRAPPER';
+                  node.style = `width:680px;height:${window.innerHeight - 230}px;marginLeft:-30px`;
+                  document.getElementById('trellisContainer').appendChild(node);
+                  window.trelliscopeApp('TRELLISCOPEWRAPPER', config);
+                }
+              }}
+              id="trellisContainer"
             />
           );
           // config.displayObj.state.sort[0].name = "image_file";
@@ -253,7 +271,8 @@ StepVariables.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
   meta: PropTypes.array.isRequired,
-  variable: PropTypes.string.isRequired
+  variable: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => (
