@@ -19,7 +19,7 @@ const styles = theme => ({
     position: 'absolute',
     top: 0,
     bottom: 0,
-    maxWidth: 900,
+    maxWidth: 1000,
     overflow: 'hidden'
   },
   panelHead: {
@@ -78,9 +78,10 @@ const styles = theme => ({
     fontSize: 20
   },
   numWrapper: {
-    textAlign: 'center'
+    // display: 'inline-block',
+    textAlign: 'center',
     // width: '100%'
-    // display: 'flex'
+    display: 'flex'
   },
   numLeft: {
     flex: '0 0 65%'
@@ -132,26 +133,30 @@ const StepVariables = ({
       if (varType === 'integer' || varType === 'real') {
         content = (
           <div className={classes.numWrapper}>
-            <Typography variant="headline" className={classes.title2}>
-              Histogram
-            </Typography>
-            <Histogram
-              data={data}
-              field={variable}
-              width={350}
-              height={300}
-              // className={classes.numLeft}
-            />
-            <Typography variant="headline" className={classes.title2}>
-              Normal Quantile Plot
-            </Typography>
-            <QQ
-              data={data}
-              field={variable}
-              width={350}
-              height={280}
-              // className={classes.numRight}
-            />
+            <div>
+              <Typography variant="headline" className={classes.title2}>
+                Histogram
+              </Typography>
+              <Histogram
+                data={data}
+                field={variable}
+                width={330}
+                height={300}
+                // className={classes.numLeft}
+              />
+            </div>
+            <div>
+              <Typography variant="headline" className={classes.title2}>
+                Normal Quantile Plot
+              </Typography>
+              <QQ
+                data={data}
+                field={variable}
+                width={330}
+                height={280}
+                // className={classes.numRight}
+              />
+            </div>
           </div>
         );
       } else if (varType === 'categorical') {
