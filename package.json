@@ -32,7 +32,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer build/static/js/main.*",
-    "trelliscope": "download --out public https://unpkg.com/trelliscopejs-lib@latest/dist/trelliscope.min.js"
+    "postinstall": "download --out public https://unpkg.com/trelliscopejs-lib@latest/dist/trelliscope.min.js"
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
