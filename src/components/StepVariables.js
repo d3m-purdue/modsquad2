@@ -187,20 +187,14 @@ const StepVariables = ({ classes, data, meta, variable, handleClick }) => {
             panelCol: 'image_url',
             panelKey: variable,
             labels: [variable],
-            sort: [
-              {
-                order: 1,
-                name: variable,
-                dir: 'asc'
-              }
-            ],
+            // sort: [{ order: 1, name: variable, dir: 'asc' }],
             updated: '2018-02-08 04:43:24',
             keySig: 'f042c72d14c4433840ed7f529498be05'
           });
 
           content = (
             <div
-              style={{ width: 680, height: 550, marginLeft: -30 }}
+              style={{ width: 680, height: window.innerHeight - 230, marginLeft: -30 }}
               ref={() => { window.trelliscopeApp('asdfasdf', config); }}
               id="asdfasdf"
             />
