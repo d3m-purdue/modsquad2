@@ -13,6 +13,10 @@ In the project directory, you can run:
 
 Installs all dependencies.
 
+### `yarn trelliscope`
+
+Gets latest trelliscope build and places it in the public directory.
+
 ### `yarn start`
 
 Runs the app in the development mode.<br>
