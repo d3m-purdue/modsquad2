@@ -8,6 +8,7 @@ import Histogram from './PlotHistogram';
 import Barchart from './PlotBarchart';
 import QQ from './PlotQQ';
 
+import createTrelliscopeSpec from '../utils/trelliscope';
 import { chipColors } from '../constants';
 import { setVariableVar } from '../actions';
 
@@ -151,7 +152,7 @@ const StepVariables = ({ classes, data, meta, variable, handleClick }) => {
             />
           </div>
         );
-      } else {
+      } else if (varType === 'categorical') {
         content = (
           <div>
             <Typography variant="headline" className={classes.title2}>
@@ -165,6 +166,50 @@ const StepVariables = ({ classes, data, meta, variable, handleClick }) => {
             />
           </div>
         );
+      } else if (varType === 'string') {
+        // check to see if it's an image
+        if (data[0][variable].match('jpg$|png$') !== null) {
+          // createTrelliscopeSpec
+          const newData = Object.assign([], [], data);
+          for (let i = 0; i < newData.length; i += 1) {
+            newData[i].image_url = `22_handgeometry_dataset/media/${newData[i][variable]}`;
+          }
+
+          const config = createTrelliscopeSpec({
+            data: newData,
+            name: 'images',
+            group: 'common',
+            desc: '',
+            height: 500,
+            width: 500,
+            nrow: 2,
+            ncol: 3,
+            panelCol: 'image_url',
+            panelKey: variable,
+            labels: [variable],
+            sort: [
+              {
+                order: 1,
+                name: variable,
+                dir: 'asc'
+              }
+            ],
+            updated: '2018-02-08 04:43:24',
+            keySig: 'f042c72d14c4433840ed7f529498be05'
+          });
+
+          content = (
+            <div
+              style={{ width: 680, height: 550, marginLeft: -30 }}
+              ref={() => { window.trelliscopeApp('asdfasdf', config); }}
+              id="asdfasdf"
+            />
+          );
+          // config.displayObj.state.sort[0].name = "image_file";
+          // config.displayObj.cogInfo.image_file.defLabel = true;
+          // config.displayObj.cogInfo.image_file.desc = "conditioning variable";
+          // trelliscopeApp('asdf', config);
+        }
       }
     }
   }

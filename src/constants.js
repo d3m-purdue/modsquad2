@@ -31,6 +31,7 @@ export const getSteps = () => ([
 export const chipColors = {
   categorical: '#1F77B4',
   real: '#FF7F0E',
-  integer: '#2CA02C'
+  integer: '#2CA02C',
+  string: '#D62728'
 };
 // '#D62728' '#9467BD' '#8C564B' '#E377C2' '#7F7F7F'

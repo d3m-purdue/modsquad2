@@ -6,6 +6,7 @@
     "classnames": "^2.2.5",
     "d3-array": "^1.2.1",
     "d3-request": "^1.0.6",
+    "d3-scale": "^2.0.0",
     "lodash.countby": "^4.6.0",
     "lodash.filter": "^4.6.0",
     "lodash.groupby": "^4.6.0",
@@ -30,10 +31,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "analyze": "source-map-explorer build/static/js/main.*"
+    "analyze": "source-map-explorer build/static/js/main.*",
+    "trelliscope": "download --out public https://unpkg.com/trelliscopejs-lib@latest/dist/trelliscope.min.js"
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
+    "download-cli": "^1.0.5",
     "eslint": "^4.17.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
