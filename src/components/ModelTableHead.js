@@ -43,8 +43,6 @@ const columnData = [
   }
 ];
 
-
-
 class ModelTableHead extends React.Component {
   createSortHandler = property => event => (
     this.props.onRequestSort(event, property)

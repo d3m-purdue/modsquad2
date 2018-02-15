@@ -36,7 +36,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     width: '100%',
-    maxWidth: 900,
+    maxWidth: 950,
     margin: 'auto'
   }
 });
