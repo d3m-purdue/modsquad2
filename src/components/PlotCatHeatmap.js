@@ -34,7 +34,7 @@ const CatHeatmap = ({
       }
     });
     for (let i = 0; i < dat.length; i += 1) {
-      dat[i].n = dat[i].n / totVars[dat[i][totVar]];
+      dat[i].n /= totVars[dat[i][totVar]];
     }
     title = `${normCols === true ? 'Column' : 'Row'}-wise Proportion`;
   }

@@ -109,7 +109,7 @@ class StepModelResults extends React.Component {
       helperText = (
         <div>
           <Typography className={classes.p}>
-            The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with respect to the target variable, we can view a heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
+            The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with respect to the target variable, we can view a "confusion matrix" heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
           </Typography>
           <Typography className={classes.p}>
             This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable, a heavy diagonal pattern should be present in the heatmap.
