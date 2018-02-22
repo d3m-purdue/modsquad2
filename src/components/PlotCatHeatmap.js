@@ -6,7 +6,7 @@ import map from 'lodash.map';
 import filter from 'lodash.filter';
 
 const CatHeatmap = ({
-  data, xField, yField, width, height
+  data, xField, yField, width, height, normCols, normRows
 }) => {
   const agg = countBy(data, d => `${d[xField]}___${d[yField]}`);
   const dat = map(agg, (value, prop) => {
@@ -17,6 +17,27 @@ const CatHeatmap = ({
       n: value
     });
   });
+
+  let title = 'Count';
+
+  if (normCols === true || normRows === true) {
+    const totVars = {};
+    let totVar = 'var1';
+    if (normRows === true) {
+      totVar = 'var2';
+    }
+    dat.forEach((d) => {
+      if (totVars[d[totVar]] === undefined) {
+        totVars[d[totVar]] = d.n;
+      } else {
+        totVars[d[totVar]] += d.n;
+      }
+    });
+    for (let i = 0; i < dat.length; i += 1) {
+      dat[i].n = dat[i].n / totVars[dat[i][totVar]];
+    }
+    title = `${normCols === true ? 'Column' : 'Row'}-wise Proportion`;
+  }
 
   // limit to the top 15 (make this an argument to the component) of each variable
   const getTopN = (dt, field, N) => {
@@ -72,7 +93,7 @@ const CatHeatmap = ({
     ],
 
     "legends": [
-      {"fill": "color", "type": "gradient", "title": "Count"}
+      {"fill": "color", "type": "gradient", "title": title}
     ],
 
     "marks": [
@@ -108,7 +129,9 @@ CatHeatmap.propTypes = {
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  normRows: PropTypes.bool.isRequired,
+  normCols: PropTypes.bool.isRequired
 };
 
 export default CatHeatmap;

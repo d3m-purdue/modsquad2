@@ -165,6 +165,8 @@ const StepExploratory = ({
                   yField={yvar}
                   width={550}
                   height={400}
+                  normCols={false}
+                  normRows={false}
                 />
               );
             }
