@@ -68,8 +68,8 @@ const BoxPlot = ({
       ],
 
       "axes": [
-        {"orient": "bottom", "scale": "xscale", "zindex": 1, "title": yField},
-        {"orient": "left", "scale": "yscale", "tickCount": 5, "zindex": 1, "title": xField}
+        {"orient": "bottom", "scale": "xscale", "zindex": 1, "title": xField},
+        {"orient": "left", "scale": "yscale", "tickCount": 5, "zindex": 1, "title": yField}
       ],
 
       "marks": [
