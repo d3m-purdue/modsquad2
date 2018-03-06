@@ -105,13 +105,13 @@ const StepVariables = ({
     content = (
       <div>
         <Typography variant="headline" className={classes.title}>
-          Features in this Problem
+          Features in this Dataset
         </Typography>
         <Typography className={classes.p}>
-          This dataset has a number of describing attributes or "features". Each one takes on multiple values, and may or may not be related to the values of of other features. For each feature, we examine the range of values it takes on using different plots depending on the type of the variable.
+          The dataset associated with this problem has a number of describing attributes or "features". Each one takes on multiple values, and may or may not be related to the values of of other features. For each feature, we examine the range of values it takes on using different plots depending on the type of the variable.
         </Typography>
         <Typography className={classes.p}>
-          For numeric variables (<span className={classes.chip2} style={{ background: chipColors['real'] }}>real</span> and <span className={classes.chip2} style={{ background: chipColors['integer'] }}>integer</span>), a histogram is displayed which shows how often the feature value falls within a set of ranges. This plot gives insight on the "distribution" of the feature's values. A companion plot is displayed which is called a "normal probability plot". If the values of the feature follow a bell-shaped (or normal) distribution, the plot for this variable will be a straight line.
+          For numeric variables (<span className={classes.chip2} style={{ background: chipColors['real'] }}>real</span> and <span className={classes.chip2} style={{ background: chipColors['integer'] }}>integer</span>), a histogram is displayed which shows how often the feature value falls within a set of ranges. This plot gives insight on the "distribution" of the feature's values. A companion plot is displayed which is called a "Normal Quantile plot". If the values of the feature follow a bell-shaped (or normal) distribution, the plot for this variable will be a straight line.  If this plot is close to a line, It indicates this feature has a central value and a smooth distribution of values around the center. Features with strongly non-linear plots might tend to confuse automated solution algorithms. 
         </Typography>
         <Typography className={classes.p}>
           For <span className={classes.chip2} style={{ background: chipColors['categorical'] }}>categorical</span> variables, a bar chart is displayed, which shows how frequently each value of the variable occurs in the data. If there are too many categories, only the top 15 will be shown.

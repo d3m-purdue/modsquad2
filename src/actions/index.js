@@ -151,7 +151,8 @@ export const runTA2 = (port, dispatch, state) => {
       // predict_features is currently ignored
       // Later user will be able to select features to use during prediction
       const predictFeatures = [];
-      const { metrics } = state.problems.data[0];
+      // just pass the first metric. Several TA2s currently only support a single metric
+      const metrics = state.problems.data[0].metrics[0].metric;
       const maxPipelines = 5;
       const context = session.context.sessionId;
 
