@@ -1,7 +1,7 @@
 [
 {
   "name": "BlindPaired",
-  "display": "FeatureLabs Modeling (TA2)",
+  "display": "Auto-Selected Framework",
   "port": 45042,
   "description": "This is the open slot for any program TA2 to be paired with ModSquad"
 }

@@ -93,9 +93,14 @@ class StepModelResults extends React.Component {
     const yvar = problems[0].targets[0].colName;
 
     const datLookup = {};
-    dat.forEach((a) => {
-      datLookup[a.d3mIndex] = [a[yvar]];
-    });
+    // Curt *** Kludge - try to eliminate hard runtime failure 
+    if (dat == null) {
+      console.log('null data discovered in render')
+    } else {
+      dat.forEach((a) => {
+        datLookup[a.d3mIndex] = [a[yvar]];
+      });
+    }
 
     let plots = '';
     let helperText = '';

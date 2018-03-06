@@ -46,10 +46,13 @@ const StepModel = ({
 }) => (
   <div>
     <Typography variant="headline" className={classes.title}>
-      Modeling
+      Model Discovery
     </Typography>
     <Typography className={classes.p}>
-      Choose a modeling framework to use to train.
+      Choose an automated modeling framework to use below.  To do this, please select the arrove above where the interface says 'Select a TA2 modeling framework'.  You will then be presented with one or more options to choose from.  Please select a framework to use by clicking on its name, even if only one option is presented.  When it is highlighted in blue, please click the button marked 'TRAIN'.  This will tell the automated framework to train itself on the dataset and generate one or more candidate solutions to the problem you are studying.  
+    </Typography>
+    <Typography className={classes.p}>
+      The automated training could take a few minutes, depending on size and complexity of the problem being estimated.  The automated framework will try several different approaches that predict the values of the target variable. If this process is successful, you will be presented with a table of ranked options to further explore below.  To explore the resulting predictions, select one or more rows of the table by clicking the box on the left side and then select the NEXT button at the bottom of the interface. Please feel free to go back and forth, selecting and reviewing different solutions until you have decided which one is the overall best.  To select the best one, click the button marked EXPORT to send this solution to be scored. Then you may proceed to the Quit panel and end the session. 
     </Typography>
     <form autoComplete="off" className={classes.form}>
       <FormControl className={classes.formControl}>
@@ -64,7 +67,7 @@ const StepModel = ({
         >
           {ta2models.map(d => (
             <MenuItem key={`item-${d.name}`} value={d.port}>
-              {d.name}
+              {d.display}
             </MenuItem>
           ))}
         </Select>

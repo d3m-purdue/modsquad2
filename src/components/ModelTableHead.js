@@ -21,7 +21,7 @@ const columnData = [
     id: 'PIPELINE',
     numeric: false,
     disablePadding: true,
-    label: 'PIPELINE'
+    label: 'CANDIDATE SOLUTIONS'
   },
   {
     id: 'SCORE',
