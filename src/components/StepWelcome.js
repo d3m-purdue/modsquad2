@@ -23,7 +23,7 @@ const StepWelcome = ({ classes }) => (
       Welcome to the D3M Purdue Data Exploration and Modeling Environment
     </Typography>
     <Typography className={classes.p}>
-      This environment allows you to explore a variety of problems by examining the data associated with the problem, invoking an automated solver to attempt a solution and, finally, reviewing the quality of the automated solution.
+      This environment allows you to explore a problem by examining the data associated with the problem, invoking an automated solver to attempt a solution and, finally, reviewing the quality of the automated solution. In some situations, the automated solver will return multiple possible solutions, and you will be able to compare and select what seems to be the best one of the suggested set of possible solutions.
     </Typography>
     <Typography className={classes.p}>
       When you are ready to begin, click the 'next' button.

@@ -53,7 +53,7 @@ class ModelTable extends React.Component {
       return ({
         id: i,
         PIPELINE: d.pipelineId,
-        ROC_AUC: d.pipelineInfo.scores[0].value,
+        F1_MACRO: d.pipelineInfo.scores[0].value,
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: (
           <Button
@@ -67,11 +67,11 @@ class ModelTable extends React.Component {
       });
     });
 
-    tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
+    tableDat.sort((a, b) => (b.F1_MACRO < a.F1_MACRO ? -1 : 1));
 
     this.state = {
       order: 'desc',
-      orderBy: 'ROC_AUC',
+      orderBy: 'F1_MACRO',
       data: tableDat,
       page: 0,
       rowsPerPage: 5
@@ -170,7 +170,7 @@ class ModelTable extends React.Component {
                       <Checkbox checked={isSelected} />
                     </TableCell>
                     <TableCell padding="none">{n.PIPELINE}</TableCell>
-                    <TableCell numeric>{n.ROC_AUC}</TableCell>
+                    <TableCell numeric>{n.F1_MACRO}</TableCell>
                     <TableCell>{n.RANK}</TableCell>
                     <TableCell>{n.EXPORT}</TableCell>
                   </TableRow>

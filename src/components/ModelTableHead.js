@@ -24,10 +24,10 @@ const columnData = [
     label: 'PIPELINE'
   },
   {
-    id: 'ROC_AUC',
+    id: 'SCORE',
     numeric: true,
     disablePadding: false,
-    label: 'ROC_AUC'
+    label: 'SCORE'
   },
   {
     id: 'RANK',
