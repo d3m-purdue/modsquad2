@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { errorMsg, activeStep, variableVar, exploreYVar, ta2port, ta2session,
-  selectedPipelines } from './app';
+  selectedPipelines, activeResultIndex } from './app';
 import { config, activeData, dataSchema, metadata, problems, pipelines,
   executedPipelines } from './data';
 
@@ -13,6 +13,7 @@ const app = combineReducers({
   ta2session,
   selectedPipelines,
   executedPipelines,
+  activeResultIndex,
   config,
   dataSchema,
   activeData,
