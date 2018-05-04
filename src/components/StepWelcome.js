@@ -20,10 +20,10 @@ const styles = {
 const StepWelcome = ({ classes }) => (
   <div>
     <Typography variant="headline" className={classes.title}>
-      Welcome to the D3M Purdue Data Exploration and Modeling Environment
+      Welcome to the D3M Purdue Data Exploration and Modeling Environment (ModSquad)
     </Typography>
     <Typography className={classes.p}>
-      This environment allows you to explore a problem by examining the data associated with the problem, invoking an automated solver to attempt a solution and, finally, reviewing the quality of the automated solution. In some situations, the automated solver will return multiple possible solutions, and you will be able to compare and select what seems to be the best one of the suggested set of possible solutions.
+      This environment allows you to explore a problem by examining the data associated with the problem, invoking an automated engine to attempt a solution and, finally, reviewing the quality of the automated solution. In some situations, the engine will return multiple possible solutions, and you will be able to compare and select what seems to be the best one out of the suggested set of possible solutions.
     </Typography>
     <Typography className={classes.p}>
       When you are ready to begin, click the 'next' button.

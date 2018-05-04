@@ -114,10 +114,10 @@ class StepModelResults extends React.Component {
       helperText = (
         <div>
           <Typography className={classes.p}>
-            The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with respect to the target variable, we can view a "confusion matrix" heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
+            The model engine returns a set of predicted values. To help assess how the engine has performed with respect to estimating the target variable, we show below a heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
           </Typography>
           <Typography className={classes.p}>
-            This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable, a heavy diagonal pattern should be present in the heatmap.
+            This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable, generally a heavy diagonal pattern should be present in the heatmap.  There is an exception, however: if the heatmap is totally empty, this solution *exactly* predicted the target variable and there was no error to even display. 
           </Typography>
         </div>
       );
@@ -144,7 +144,7 @@ class StepModelResults extends React.Component {
       helperText = (
         <div>
           <Typography className={classes.p}>
-            The prediction algorithm returns a set of predicted values, from which we can compute residuals, which are the actual observed values subtracted from the predicted values. If a model fits well, the residuals should visually not exhibit any kind of pattern, and should appear as random noise.
+            The model engine returns a set of predicted values, from which we can compute residuals, which are the actual observed values subtracted from the predicted values. If a model fits well, the residuals should visually not exhibit any kind of pattern, and should appear as random noise.
           </Typography>
           <Typography className={classes.p}>
           It is useful to visualize the residuals vs. the predicted values and also vs. all of the other variables in the data to look for patterns. In all of these plots, the residuals should vary randomly around zero.
@@ -205,7 +205,7 @@ class StepModelResults extends React.Component {
         {helperText}
         <form autoComplete="off" className={classes.form}>
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="variable-input">Pipeline</InputLabel>
+            <InputLabel htmlFor="variable-input">Candidate Solution</InputLabel>
             <Select
               value={this.state.selected}
               onChange={this.handleSelect}
@@ -220,7 +220,7 @@ class StepModelResults extends React.Component {
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>Select a pipeline result to visualize</FormHelperText>
+            <FormHelperText>Select a solution result to visualize</FormHelperText>
           </FormControl>
         </form>
         <div className={classes.plotContainer}>
