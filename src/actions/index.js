@@ -182,6 +182,8 @@ export const runTA2 = (port, dispatch, state) => {
 
       dispatch(requestPipelines());
       json(url).post({}, (resp) => {
+        console.log(resp);
+
         const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
         dispatch(receivePipelines(respComplete));
       })
