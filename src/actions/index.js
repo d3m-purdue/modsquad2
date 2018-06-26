@@ -144,6 +144,8 @@ export const fetchConfig = (config = '/config') =>
 export const runTA2 = (port, dispatch, state) => {
   json(`/session?port=${port}`)
     .post({}, (session) => {
+      console.log(session);
+
       const dataURI = state.config.config.dataset_schema;
       const targetFeatures = state.problems.data[0].targets;
       const { taskType } = state.problems.data[0];
@@ -153,20 +155,21 @@ export const runTA2 = (port, dispatch, state) => {
       const predictFeatures = [];
       const { metrics } = state.problems.data[0];
       const maxPipelines = 5;
-      const context = session.context.sessionId;
 
-      dispatch(setTA2Session(session));
+      // const context = session.context.sessionId;
+
+      // dispatch(setTA2Session(session));
 
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
-        context,
+        // context,
         data_uri: dataURI,
-        task_type: taskType,
-        task_subtype: taskSubType,
-        metrics,
-        target_features: targetFeatures,
-        predict_features: predictFeatures,
-        max_pipelines: maxPipelines
+        // task_type: taskType,
+        // task_subtype: taskSubType,
+        // metrics,
+        // target_features: targetFeatures,
+        // predict_features: predictFeatures,
+        // max_pipelines: maxPipelines
       };
       console.log('pipeline params:', params);
 
