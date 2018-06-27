@@ -41,26 +41,28 @@ class ModelTable extends React.Component {
 
     const dat = props.data;
 
-    const rocs = dat.map(d => d.pipelineInfo.scores[0].value);
+    console.log(dat);
+
+    const rocs = dat.map(d => d.internalScore);
     rocs.sort();
     const rocsMin = rocs[0];
     const rocsMax = rocs[rocs.length - 1];
 
     const tableDat = dat.map((d, i) => {
-      const val = d.pipelineInfo.scores[0].value;
+      const val = d.internalScore;
       const width = (((val - rocsMin) / (rocsMax - rocsMin)) * 50) + 50;
 
       return ({
         id: i,
-        PIPELINE: d.pipelineId,
-        ROC_AUC: d.pipelineInfo.scores[0].value,
+        PIPELINE: d.solutionId,
+        ROC_AUC: d.internalScore,
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: (
           <Button
             size="small"
             color="primary"
             variant="raised"
-            onClick={() => this.props.handleExport(d.pipelineId, this.props.state)}
+            onClick={() => this.props.handleExport(d.solutionId, this.props.state)}
           >
             Export
           </Button>)

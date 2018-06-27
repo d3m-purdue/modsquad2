@@ -182,10 +182,10 @@ export const runTA2 = (port, dispatch, state) => {
 
       dispatch(requestPipelines());
       json(url).post({}, (resp) => {
-        console.log(resp);
+        // console.log(resp);
 
-        const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
-        dispatch(receivePipelines(respComplete));
+        // const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+        dispatch(receivePipelines(resp));
       })
         .on('error', () => dispatch(setErrorMessage(
           'There was an error running the pipelines...' // ${err.target.responseURL}
@@ -200,14 +200,14 @@ export const getPipelinePredictions = (state, dispatch) => {
     return;
   }
 
-  const context = state.ta2session.context.sessionId;
+  // const context = state.ta2session.context.sessionId;
   const dataURI = state.config.config.dataset_schema;
 
   state.selectedPipelines.map((ii) => {
     const d = state.pipelines.data[ii];
     const params = {
-      context,
-      pipeline: d.pipelineId,
+      // context,
+      pipeline: d.solutionId,
       data_uri: dataURI
     };
 
@@ -219,7 +219,12 @@ export const getPipelinePredictions = (state, dispatch) => {
     dispatch(requestExecutedPipelines());
 
     json(url).post({}, (resp) => {
-      const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+      console.log(resp);
+
+      const respComplete = resp.filter(x => x.progress.state === 'COMPLETED').map(d => {
+        d.fittedSolutionId = JSON.parse(d.fittedSolutionId);
+        return d;
+      });
       respComplete.forEach((pipeline) => {
         // read the CSV results from the pipeline. First, extract the filename from the path,
         // then add the accessible directory and read the file
