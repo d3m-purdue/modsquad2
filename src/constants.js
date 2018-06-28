@@ -19,6 +19,7 @@ export const SET_DATA_SCHEMA = 'SET_DATA_SCHEMA';
 export const SET_SELECTED_PIPELINES = 'SET_SELECTED_PIPELINES';
 export const SET_TA2_SESSION = 'SET_TA2_SESSION';
 export const SET_ACTIVE_RESULT_INDEX = 'SET_ACTIVE_RESULT_INDEX';
+export const SET_INACTIVE_VARIABLES = 'SET_INACTIVE_VARIABLES';
 
 export const getSteps = () => ([
   'Welcome',

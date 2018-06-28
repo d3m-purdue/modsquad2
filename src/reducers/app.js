@@ -1,6 +1,6 @@
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_SESSION,
-  SET_ACTIVE_RESULT_INDEX } from '../constants';
+  SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES } from '../constants';
 
 export const errorMsg = (state = '', action) => {
   switch (action.type) {
@@ -69,6 +69,15 @@ export const ta2session = (state = {}, action) => {
   switch (action.type) {
     case SET_TA2_SESSION:
       return Object.assign({}, {}, action.val);
+    default:
+  }
+  return state;
+};
+
+export const inactiveVariables = (state = [], action) => {
+  switch (action.type) {
+    case SET_INACTIVE_VARIABLES:
+      return Object.assign([], [], action.val);
     default:
   }
   return state;

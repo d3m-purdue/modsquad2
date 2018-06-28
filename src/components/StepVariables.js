@@ -4,13 +4,16 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+// import FormControlLabel from 'material-ui/Form';
+import Switch from 'material-ui/Switch';
+
 import Histogram from './PlotHistogram';
 import Barchart from './PlotBarchart';
 import QQ from './PlotQQ';
 
 import createTrelliscopeSpec from '../utils/trelliscope';
 import { chipColors } from '../constants';
-import { setVariableVar } from '../actions';
+import { setVariableVar, setInactiveVariables } from '../actions';
 
 const styles = theme => ({
   root: {
@@ -51,6 +54,9 @@ const styles = theme => ({
     paddingLeft: 6,
     paddingRight: 6,
     opacity: 0.4
+  },
+  muted: {
+    color: '#aaaaaa'
   },
   listContainer: {
     borderRight: '1px solid #efefef',
@@ -95,12 +101,13 @@ const styles = theme => ({
 });
 
 const StepVariables = ({
-  classes, data, meta, variable, handleClick
+  classes, data, meta, variable, inactiveVars, handleSwitch, handleClick
 }) => {
   if (data.length === 0 || meta.length === 0) {
     // TODO: loading indicator
   }
   let content = '';
+  let switchContent = '';
   if (variable === '__info__') {
     content = (
       <div>
@@ -111,7 +118,7 @@ const StepVariables = ({
           The dataset associated with this problem has a number of describing attributes or "features". Each one takes on multiple values, and may or may not be related to the values of of other features. For each feature, we examine the range of values it takes on using different plots depending on the type of the variable.
         </Typography>
         <Typography className={classes.p}>
-          For numeric variables (<span className={classes.chip2} style={{ background: chipColors['real'] }}>real</span> and <span className={classes.chip2} style={{ background: chipColors['integer'] }}>integer</span>), a histogram is displayed which shows how often the feature value falls within a set of ranges. This plot gives insight on the "distribution" of the feature's values. A companion plot is displayed which is called a "Normal Quantile plot". If the values of the feature follow a bell-shaped (or normal) distribution, the plot for this variable will be a straight line.  If this plot is close to a line, It indicates this feature has a central value and a smooth distribution of values around the center. Features with strongly non-linear plots might tend to confuse automated solution algorithms. 
+          For numeric variables (<span className={classes.chip2} style={{ background: chipColors['real'] }}>real</span> and <span className={classes.chip2} style={{ background: chipColors['integer'] }}>integer</span>), a histogram is displayed which shows how often the feature value falls within a set of ranges. This plot gives insight on the "distribution" of the feature's values. A companion plot is displayed which is called a "Normal Quantile plot". If the values of the feature follow a bell-shaped (or normal) distribution, the plot for this variable will be a straight line.  If this plot is close to a line, It indicates this feature has a central value and a smooth distribution of values around the center. Features with strongly non-linear plots might tend to confuse automated solution algorithms.
         </Typography>
         <Typography className={classes.p}>
           For <span className={classes.chip2} style={{ background: chipColors['categorical'] }}>categorical</span> variables, a bar chart is displayed, which shows how frequently each value of the variable occurs in the data. If there are too many categories, only the top 15 will be shown.
@@ -130,6 +137,16 @@ const StepVariables = ({
       }
     }
     if (varType !== '') {
+      switchContent = (
+        <Typography>
+        Include this variable in the analysis
+          <Switch
+            checked={inactiveVars.indexOf(variable) === -1}
+            onChange={() => handleSwitch(variable, inactiveVars)}
+          />
+        </Typography>
+      );
+
       if (varType === 'integer' || varType === 'real') {
         content = (
           <div className={classes.numWrapper}>
@@ -252,7 +269,7 @@ const StepVariables = ({
               >
                 <ListItemText
                   primary={
-                    <span>
+                    <span className={inactiveVars.indexOf(d.colName) > -1 ? classes.muted : ''}>
                       {d.colName}
                       <span className={classes.chip} style={{ background: chipColors[d.colType] }}>
                         {d.colType}
@@ -267,6 +284,7 @@ const StepVariables = ({
       </div>
       <div className={classes.contentContainer}>
         {content}
+        {switchContent}
       </div>
     </div>
   );
@@ -277,6 +295,8 @@ StepVariables.propTypes = {
   data: PropTypes.array.isRequired,
   meta: PropTypes.array.isRequired,
   variable: PropTypes.string.isRequired,
+  inactiveVars: PropTypes.array.isRequired,
+  handleSwitch: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired
 };
 
@@ -284,13 +304,23 @@ const mapStateToProps = state => (
   {
     data: state.activeData.data,
     meta: state.metadata.data,
-    variable: state.variableVar
+    variable: state.variableVar,
+    inactiveVars: state.inactiveVariables
   }
 );
 
 const mapDispatchToProps = dispatch => ({
   handleClick: (val) => {
     dispatch(setVariableVar(val));
+  },
+  handleSwitch: (variable, inactiveVars) => {
+    const idx = inactiveVars.indexOf(variable);
+    if (idx === -1) {
+      inactiveVars.push(variable);
+    } else {
+      inactiveVars.splice(idx, 1);
+    }
+    dispatch(setInactiveVariables(inactiveVars));
   }
 });
 
