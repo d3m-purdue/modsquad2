@@ -162,22 +162,22 @@ export const runTA2 = (port, dispatch, state) => {
       // Later user will be able to select features to use during prediction
       const predictFeatures = [];
       // just pass the first metric. Several TA2s currently only support a single metric
-      const metrics = state.problems.data[0].metrics[0].metric;
+      const {metrics} = state.problems.data[0];
       const maxPipelines = 5;
-      const context = session.context.sessionId;
+      //const context = session.context.sessionId;
 
-      dispatch(setTA2Session(session));
+      //dispatch(setTA2Session(session));
 
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
-        context,
+        //context,
         data_uri: dataURI,
-        task_type: taskType,
-        task_subtype: taskSubType,
-        metrics,
-        target_features: targetFeatures,
-        predict_features: predictFeatures,
-        max_pipelines: maxPipelines
+        //task_type: taskType,
+        //task_subtype: taskSubType,
+        //metrics,
+        //target_features: targetFeatures,
+        //predict_features: predictFeatures,
+        //max_pipelines: maxPipelines
       };
       console.log('pipeline params:', params);
 
@@ -190,8 +190,8 @@ export const runTA2 = (port, dispatch, state) => {
 
       dispatch(requestPipelines());
       json(url).post({}, (resp) => {
-        const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
-        dispatch(receivePipelines(respComplete));
+        //const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+        dispatch(receivePipelines(resp));
       })
         .on('error', () => dispatch(setErrorMessage(
           'There was an error running the pipelines...' // ${err.target.responseURL}
@@ -206,14 +206,14 @@ export const getPipelinePredictions = (state, dispatch) => {
     return;
   }
 
-  const context = state.ta2session.context.sessionId;
+  //const context = state.ta2session.context.sessionId;
   const dataURI = state.config.config.dataset_schema;
 
   state.selectedPipelines.map((ii) => {
     const d = state.pipelines.data[ii];
     const params = {
-      context,
-      pipeline: d.pipelineId,
+      //context,
+      pipeline: d.solutionId,
       data_uri: dataURI
     };
 
@@ -225,11 +225,14 @@ export const getPipelinePredictions = (state, dispatch) => {
     dispatch(requestExecutedPipelines());
 
     json(url).post({}, (resp) => {
-      const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+      //const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+      const respComplete = resp;
+
       respComplete.forEach((pipeline) => {
         // read the CSV results from the pipeline. First, extract the filename from the path,
         // then add the accessible directory and read the file
-        const filename = pipeline.resultUri.substring(pipeline.resultUri.lastIndexOf('/') + 1);
+        const csvUri = pipeline.exposedOutputs['outputs.0']['csvUri']
+        const filename = csvUri.substring(csvUri.lastIndexOf('/') + 1);
         const accessibleLocation = `pipelines/${filename}`;
 
         // read the CSV data into an object and store it in redux

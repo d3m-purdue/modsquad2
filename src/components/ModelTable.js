@@ -41,37 +41,37 @@ class ModelTable extends React.Component {
 
     const dat = props.data;
 
-    const rocs = dat.map(d => d.pipelineInfo.scores[0].value);
+    const rocs = dat.map(d => d.internalScore);
     rocs.sort();
     const rocsMin = rocs[0];
     const rocsMax = rocs[rocs.length - 1];
 
     const tableDat = dat.map((d, i) => {
-      const val = d.pipelineInfo.scores[0].value;
+      const val = d.internalScore;
       const width = (((val - rocsMin) / (rocsMax - rocsMin)) * 50) + 50;
 
       return ({
         id: i,
-        PIPELINE: d.pipelineId,
-        F1_MACRO: d.pipelineInfo.scores[0].value,
+        PIPELINE: d.solutionId,
+        ROC_AUC: d.internalScore,
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: (
           <Button
             size="small"
             color="primary"
             variant="raised"
-            onClick={() => this.props.handleExport(d.pipelineId, this.props.state)}
+            onClick={() => this.props.handleExport(d.solutionId, this.props.state)}
           >
             Export
           </Button>)
       });
     });
 
-    tableDat.sort((a, b) => (b.F1_MACRO < a.F1_MACRO ? -1 : 1));
+    tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
 
     this.state = {
       order: 'desc',
-      orderBy: 'F1_MACRO',
+      orderBy: 'ROC_AUC',
       data: tableDat,
       page: 0,
       rowsPerPage: 5
@@ -170,7 +170,7 @@ class ModelTable extends React.Component {
                       <Checkbox checked={isSelected} />
                     </TableCell>
                     <TableCell padding="none">{n.PIPELINE}</TableCell>
-                    <TableCell numeric>{n.F1_MACRO}</TableCell>
+                    <TableCell numeric>{n.ROC_AUC}</TableCell>
                     <TableCell>{n.RANK}</TableCell>
                     <TableCell>{n.EXPORT}</TableCell>
                   </TableRow>

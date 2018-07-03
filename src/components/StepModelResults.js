@@ -15,6 +15,16 @@ import CatHeatmap from './PlotCatHeatmap';
 
 import { setActiveResultIndex } from '../actions';
 
+
+const determineProblemType = (metric) => {
+  const classificationMetrics = ['accuracy', 'f1Macro', 'f1Micro', 'ROC_AUC', 'rocAuc', 'rocAucMicro', 'rocAucMacro'];
+  if (classificationMetrics.indexOf(metric) > -1) {
+    return 'classification';
+  }
+  return 'regression';
+};
+
+
 const styles = theme => ({
   root: {
     width: '100%'
@@ -60,7 +70,7 @@ const styles = theme => ({
 });
 
 const StepModelResults = ({
-  classes, data, pdata, meta, problems, selected, handleChange
+  classes, data, pdata, meta, problems, selected, pipelines, selectedPipelines, handleChange, 
 }) => {
   if (pdata.isFetching === true) {
     return (
@@ -89,7 +99,7 @@ const StepModelResults = ({
   let plots = '';
   let helperText = '';
 
-  if (problems[0].taskType === 'classification') {
+  if (determineProblemType(problems[0].metrics[0].metric) === 'classification') {
     for (let i = 0; i < data.length; i += 1) {
       // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
       data[i].Predicted = parseFloat(datLookup[i]);
@@ -117,7 +127,7 @@ const StepModelResults = ({
         normRows={false}
       />
     );
-  } else if (problems[0].taskType === 'regression') {
+  } else if (determineProblemType(problems[0].metrics[0].metric) === 'regression') {
     // construct a lookup table by id so we can correctly merge with our data
     for (let i = 0; i < data.length; i += 1) {
       // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
@@ -198,9 +208,9 @@ const StepModelResults = ({
               id: 'pipeline-input'
             }}
           >
-            {pdata.data.map((d, i) => (
-              <MenuItem key={`item-${d.pipeline.pipelineId}`} value={i}>
-                {d.pipeline.pipelineId}
+            {selectedPipelines.map((d,i) => (
+              <MenuItem key={`item-${i}`} value={i}>
+                {pipelines.data[d].solutionId}
               </MenuItem>
             ))}
           </Select>
@@ -221,6 +231,8 @@ StepModelResults.propTypes = {
   pdata: PropTypes.object.isRequired,
   problems: PropTypes.array.isRequired,
   selected: PropTypes.number.isRequired,
+  pipelines: PropTypes.object.isRequired,
+  selectedPipelines: PropTypes.array.isRequired,
   handleChange: PropTypes.func.isRequired
 };
 
@@ -230,7 +242,9 @@ const mapStateToProps = state => (
     pdata: state.executedPipelines,
     meta: state.metadata.data,
     problems: state.problems.data,
-    selected: state.activeResultIndex
+    selected: state.activeResultIndex,
+    pipelines: state.pipelines,
+    selectedPipelines: state.selectedPipelines
   }
 );
 
