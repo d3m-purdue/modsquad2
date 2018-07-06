@@ -70,7 +70,7 @@ const styles = theme => ({
 });
 
 const StepModelResults = ({
-  classes, data, pdata, meta, problems, selected, pipelines, selectedPipelines, handleChange, 
+  classes, data, pdata, meta, problems, selected, pipelines, selectedPipelines, handleChange,
 }) => {
   if (pdata.isFetching === true) {
     return (
@@ -92,9 +92,11 @@ const StepModelResults = ({
   const yvar = problems[0].targets[0].colName;
 
   const datLookup = {};
-  dat.forEach((a) => {
-    datLookup[a.d3mIndex] = [a[yvar]];
-  });
+  if (dat) {
+    dat.forEach((a) => {
+      datLookup[a.d3mIndex] = [a[yvar]];
+    });
+  }
 
   let plots = '';
   let helperText = '';
