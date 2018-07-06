@@ -220,23 +220,22 @@ export const getPipelinePredictions = (state, dispatch) => {
     const query = [];
     Object.entries(params).forEach(a => query.push(`${a[0]}=${a[1]}`));
 
-    const url = `/pipeline/execute?${query.join('&')}`;
+    let url = `/pipeline/execute?${query.join('&')}`;
 
     dispatch(requestExecutedPipelines());
 
     json(url).post({}, (resp) => {
-      //const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
       const respComplete = resp;
 
       respComplete.forEach((pipeline) => {
         // read the CSV results from the pipeline. First, extract the filename from the path,
         // then add the accessible directory and read the file
-        const csvUri = pipeline.exposedOutputs['outputs.0']['csvUri']
-        const filename = csvUri.substring(csvUri.lastIndexOf('/') + 1);
-        const accessibleLocation = `pipelines/${filename}`;
+
+        const csvUri = pipeline.exposedOutputs['outputs.0']['csvUri'];
 
         // read the CSV data into an object and store it in redux
-        csv(accessibleLocation, (predictedData) => {
+        const csvData = `pipeline/results?resultURI=${csvUri}`;
+        csv(csvData, (predictedData) => {
           // console.log(predictedData[0]);
           pipeResults.push({ pipeline, data: predictedData });
           console.log(pipeResults.length);

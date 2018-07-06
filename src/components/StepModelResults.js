@@ -92,9 +92,11 @@ const StepModelResults = ({
   const yvar = problems[0].targets[0].colName;
 
   const datLookup = {};
-  dat.forEach((a) => {
-    datLookup[a.d3mIndex] = [a[yvar]];
-  });
+  if (dat) {
+    dat.forEach((a) => {
+      datLookup[a.d3mIndex] = [a[yvar]];
+    });
+  }
 
   let plots = '';
   let helperText = '';
