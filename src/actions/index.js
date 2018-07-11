@@ -226,8 +226,9 @@ export const getPipelinePredictions = (state, dispatch) => {
 
     json(url).post({}, (resp) => {
       const respComplete = resp;
+      console.log('executed was:', respComplete);
 
-      respComplete.forEach((pipeline) => {
+      respComplete.exposed.forEach((pipeline) => {
         // read the CSV results from the pipeline. First, extract the filename from the path,
         // then add the accessible directory and read the file
 
@@ -237,8 +238,10 @@ export const getPipelinePredictions = (state, dispatch) => {
         const csvData = `pipeline/results?resultURI=${csvUri}`;
         csv(csvData, (predictedData) => {
           // console.log(predictedData[0]);
+          pipeline.solution_id = respComplete.fitted_solution_id[0];
+          console.log('adding amazing solution id to pipeline: ', respComplete.fitted_solution_id[0]);
           pipeResults.push({ pipeline, data: predictedData });
-          console.log(pipeResults.length);
+          console.log('pipe results length:',pipeResults.length);
 
           // if this is the lastt callback to run, populate the state
           if (pipeResults.length === nn) {
@@ -252,10 +255,10 @@ export const getPipelinePredictions = (state, dispatch) => {
 };
 
 export const exportPipeline = (pipelineId, state) => {
-  const context = state.ta2session.context.sessionId;
-
+  //const context = state.ta2session.context.sessionId;
+  // get solution from state here
+  state.executedPipelines.data[pipelineId]
   const params = {
-    context,
     pipeline: pipelineId
   };
 
