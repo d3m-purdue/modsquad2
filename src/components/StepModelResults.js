@@ -104,7 +104,7 @@ const StepModelResults = ({
   if (determineProblemType(problems[0].metrics[0].metric) === 'classification') {
     for (let i = 0; i < data.length; i += 1) {
       // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
-      data[i].Predicted = parseFloat(datLookup[i]);
+      data[i].Predicted = parseFloat(datLookup[data[i].d3mIndex]);
     }
 
     helperText = (
@@ -133,7 +133,7 @@ const StepModelResults = ({
     // construct a lookup table by id so we can correctly merge with our data
     for (let i = 0; i < data.length; i += 1) {
       // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
-      data[i].Predicted = parseFloat(datLookup[i]);
+      data[i].Predicted = parseFloat(datLookup[data[i].d3mIndex]);
       data[i].Residual = parseFloat(data[i][yvar]) - data[i].Predicted;
     }
 

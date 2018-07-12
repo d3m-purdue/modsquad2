@@ -9,6 +9,7 @@ const CatHeatmap = ({
   data, xField, yField, width, height, normCols, normRows
 }) => {
   const agg = countBy(data, d => `${d[xField]}___${d[yField]}`);
+
   const dat = map(agg, (value, prop) => {
     const tmp = prop.split('___');
     return ({
@@ -51,6 +52,11 @@ const CatHeatmap = ({
   const topY = getTopN(data, yField, 15);
   const datf = filter(dat, d => topX.indexOf(d.var1) >= 0 && topY.indexOf(d.var2) >= 0);
 
+  let colorDomain = { data: "table", field: "n" };
+  if (normCols === true || normRows === true) {
+    colorDomain = [0, 1];
+  }
+
   /* eslint-disable */
   const spec = {
     "$schema": "https://vega.github.io/schema/vega/v3.0.json",
@@ -82,7 +88,7 @@ const CatHeatmap = ({
         "name": "color",
         "type": "sequential",
         "range": {"scheme": "viridis"},
-        "domain": {"data": "table", "field": "n"},
+        "domain": colorDomain,
         "zero": false, "nice": false
       }
     ],
