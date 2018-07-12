@@ -2,7 +2,7 @@ import { json, csv } from 'd3-request';
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT,
   SET_INACTIVE_VARIABLES, SET_SELECTED_PIPELINES,
-  SET_ACTIVE_RESULT_INDEX,
+  SET_ACTIVE_RESULT_INDEX, SET_PIPELINE_PROGRESS,
   REQUEST_EXECUTED_PIPELINES, RECEIVE_EXECUTED_PIPELINES,
   REQUEST_CONFIG, RECEIVE_CONFIG, SET_DATA_SCHEMA,
   REQUEST_ACTIVE_DATA, RECEIVE_ACTIVE_DATA,
@@ -109,6 +109,10 @@ export const setTA2Session = val => ({
 
 export const setActiveResultIndex = val => ({
   type: SET_ACTIVE_RESULT_INDEX, val
+});
+
+export const setPipelineProgress = val => ({
+  type: SET_PIPELINE_PROGRESS, val
 });
 
 export const setErrorMessage = msg => ({

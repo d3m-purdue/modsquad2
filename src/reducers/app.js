@@ -1,6 +1,7 @@
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_SESSION,
-  SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES } from '../constants';
+  SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES,
+  SET_PIPELINE_PROGRESS } from '../constants';
 
 export const errorMsg = (state = '', action) => {
   switch (action.type) {
@@ -14,6 +15,15 @@ export const errorMsg = (state = '', action) => {
 export const activeStep = (state = 0, action) => {
   switch (action.type) {
     case SET_ACTIVE_STEP:
+      return action.val;
+    default:
+  }
+  return state;
+};
+
+export const pipelineProgress = (state = 0, action) => {
+  switch (action.type) {
+    case SET_PIPELINE_PROGRESS:
       return action.val;
     default:
   }
