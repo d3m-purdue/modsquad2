@@ -242,7 +242,8 @@ export const getPipelinePredictions = (state, dispatch) => {
         const csvData = `pipeline/results?resultURI=${csvUri}`;
         csv(csvData, (predictedData) => {
           // console.log(predictedData[0]);
-          pipeline.solution_id = respComplete.fitted_solution_id[0];
+          pipeline.solution_id = d.solutionId;
+          pipeline.fitted_solution_id = respComplete.fitted_solution_id[0];
           console.log('adding amazing solution id to pipeline: ', respComplete.fitted_solution_id[0]);
           pipeResults.push({ pipeline, data: predictedData });
           console.log('pipe results length:',pipeResults.length);
@@ -261,9 +262,14 @@ export const getPipelinePredictions = (state, dispatch) => {
 export const exportPipeline = (pipelineId, state) => {
   //const context = state.ta2session.context.sessionId;
   // get solution from state here
-  state.executedPipelines.data[pipelineId]
+
+  const currentlyExecutedIds = state.executedPipelines.data.map(d => d.pipeline.solution_id);
+
+  const idx = currentlyExecutedIds.indexOf(pipelineId);
+  const fittedId = state.executedPipelines.data[idx].pipeline.fitted_solution_id;
+
   const params = {
-    pipeline: pipelineId
+    pipeline: fittedId
   };
 
   const query = [];

@@ -103,12 +103,21 @@ class StepModel extends React.Component {
               Train
             </Button>
           ) : ''}
-          {pipelines.isFetching === true ? (
+          {pipelines.isFetching === true & pipelineProgress !== 100 ? (
             <div className={classes.loadingDiv}>
               <LinearProgress variant="determinate" value={pipelineProgress} />
               <br />
               <Typography>
                 Running models...
+              </Typography>
+            </div>
+          ) : ''}
+          {pipelines.isFetching === true & pipelineProgress === 100 ? (
+            <div className={classes.loadingDiv}>
+              <LinearProgress variant="determinate" value={pipelineProgress} />
+              <br />
+              <Typography>
+                Fetching results...
               </Typography>
             </div>
           ) : ''}

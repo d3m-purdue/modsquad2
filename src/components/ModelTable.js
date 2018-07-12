@@ -46,9 +46,12 @@ class ModelTable extends React.Component {
     const rocsMin = rocs[0];
     const rocsMax = rocs[rocs.length - 1];
 
+    const currentlyExecutedIds = this.props.state.executedPipelines.data.map(d => d.pipeline.solution_id);
+
     const tableDat = dat.map((d, i) => {
       const val = d.internalScore;
       const width = (((val - rocsMin) / (rocsMax - rocsMin)) * 50) + 50;
+      const disableButton = currentlyExecutedIds.indexOf(d.solutionId) === -1;
 
       return ({
         id: i,
@@ -60,6 +63,7 @@ class ModelTable extends React.Component {
             size="small"
             color="primary"
             variant="raised"
+            disabled={disableButton}
             onClick={() => this.props.handleExport(d.solutionId, this.props.state)}
           >
             Export
