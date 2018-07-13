@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+import HelpIcon from 'material-ui-icons/Help';
+import IconButton from 'material-ui/IconButton';
+import Tooltip from 'material-ui/Tooltip';
 // import FormControlLabel from 'material-ui/Form';
 import Switch from 'material-ui/Switch';
 
@@ -173,6 +176,16 @@ const StepVariables = ({
                 height={280}
                 // className={classes.numRight}
               />
+            </div>
+            <div>
+              <Tooltip
+                id="tooltip-icon"
+                title="Help text about histograms and quantile plots..."
+              >
+                <IconButton aria-label="Help">
+                  <HelpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         );
