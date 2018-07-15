@@ -20,10 +20,10 @@ const styles = {
 const StepQuit = ({ classes }) => (
   <div>
     <Typography variant="headline" className={classes.title}>
-      Thank You for Trying Out the Purdue ModSquad TA3 System
+      Thank You for Trying Out the Purdue ModSquad System
     </Typography>
     <Typography className={classes.p}>
-      Please click the button below to stop the TA3 system and end this working session.
+      Please click the button below to stop ModSquad and end your working session.
     </Typography>
   </div>
 );
