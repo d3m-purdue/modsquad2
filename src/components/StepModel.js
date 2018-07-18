@@ -89,11 +89,32 @@ class StepModel extends React.Component {
     return (
       <div>
         <Typography variant="headline" className={classes.title}>
-          Modeling
+          Model Discovery
         </Typography>
         <Typography className={classes.p}>
-          Choose a modeling framework to use to train.
+          Choose a modeling engine to use below.  To do this, please select the arrove above where the interface says
+           'Select a modeling engine'.  You will then be presented with one or more options to choose from.  
+           Please select an engine to use by clicking on its name, even if only one engine option is presented.  
+           When the TRAIN button becomes highlighted in blue, please click it to begin the training process.  
+           This will tell the modeling engine to train itself on the dataset and generate one or more candidate solutions 
+           to the problem you are studying.
         </Typography>
+        <Typography className={classes.p}>
+        The automated training could take a few minutes, depending on size and complexity of the problem being estimated.  
+        The modeling engine will try several different approaches that predict the values of the target variable. 
+        If this process is successful, you will be presented with a table of ranked options to further explore below.  
+        To explore the resulting predictions, select one or more rows of the table by clicking the box on the left of the 
+        row and then select the NEXT button at the bottom of the interface. 
+        </Typography>
+        <Typography className={classes.p}>
+        Please feel free to go back and forth, 
+        selecting and reviewing different solutions until you have settled on a few of the overall best proposed solutions.  
+        When you are ready to indicate your selections of the  best candidates, click the button marked
+        EXPORT for each of your best solutions in order: with the best Exported first, then the second best, continuing
+        until you have selected at least the best three to be scored. After selection is complete, your job is finished! Please proceed to the Quit
+         panel and end your session. 
+        </Typography>    
+
         <form autoComplete="off" className={classes.form}>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="model-input" />
@@ -112,7 +133,7 @@ class StepModel extends React.Component {
               ))}
             </Select>
             <FormHelperText>
-              Select a TA2 modeling framework
+              Select a modeling engine
             </FormHelperText>
           </FormControl>
           <FormControl className={classes.formControl}>
