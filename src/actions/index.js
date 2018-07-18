@@ -1,6 +1,6 @@
 import { json, csv } from 'd3-request';
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
-  SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT,
+  SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_TIMEOUT,
   SET_INACTIVE_VARIABLES, SET_SELECTED_PIPELINES,
   SET_ACTIVE_RESULT_INDEX, SET_PIPELINE_PROGRESS,
   REQUEST_EXECUTED_PIPELINES, RECEIVE_EXECUTED_PIPELINES,
@@ -8,7 +8,7 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   REQUEST_ACTIVE_DATA, RECEIVE_ACTIVE_DATA,
   REQUEST_METADATA, RECEIVE_METADATA,
   REQUEST_PROBLEMS, RECEIVE_PROBLEMS,
-  REQUEST_PIPELINES, RECEIVE_PIPELINES } from '../constants';
+  REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES } from '../constants';
 
 export const setActiveStep = val => ({
   type: SET_ACTIVE_STEP,
@@ -27,6 +27,11 @@ export const setExploratoryYVar = val => ({
 
 export const setTA2Port = val => ({
   type: SET_TA2_PORT,
+  val
+});
+
+export const setTA2Timeout = val => ({
+  type: SET_TA2_TIMEOUT,
   val
 });
 
@@ -77,6 +82,10 @@ export const receiveProblems = dat => ({
 
 export const requestPipelines = () => ({
   type: REQUEST_PIPELINES
+});
+
+export const cancelPipelines = () => ({
+  type: CANCEL_PIPELINES
 });
 
 export const receivePipelines = dat => ({
@@ -159,47 +168,55 @@ export const runTA2 = (port, dispatch, state) => {
   json(`/session?port=${port}`)
     .post({}, (session) => {
       const dataURI = state.config.config.dataset_schema;
-      const targetFeatures = state.problems.data[0].targets;
-      const { taskType } = state.problems.data[0];
-      const { taskSubType } = state.problems.data[0];
+      // const targetFeatures = state.problems.data[0].targets;
+      // const { taskType } = state.problems.data[0];
+      // const { taskSubType } = state.problems.data[0];
+
       // predict_features is currently ignored
       // Later user will be able to select features to use during prediction
-      const predictFeatures = [];
-      // just pass the first metric. Several TA2s currently only support a single metric
-      const {metrics} = state.problems.data[0];
-      const maxPipelines = 5;
-      //const context = session.context.sessionId;
 
-      //dispatch(setTA2Session(session));
+      // const predictFeatures = [];
+
+      // just pass the first metric. Several TA2s currently only support a single metric
+
+      // const {metrics} = state.problems.data[0];
+      // const maxPipelines = 5;
+
+      // const context = session.context.sessionId;
+
+      // dispatch(setTA2Session(session));
 
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
-        //context,
-        data_uri: dataURI,
-        //task_type: taskType,
-        //task_subtype: taskSubType,
-        //metrics,
-        //target_features: targetFeatures,
-        //predict_features: predictFeatures,
-        //max_pipelines: maxPipelines
+        // context,
+        data_uri: dataURI
+        // task_type: taskType,
+        // task_subtype: taskSubType,
+        // metrics,
+        // target_features: targetFeatures,
+        // predict_features: predictFeatures,
+        // max_pipelines: maxPipelines
       };
-      console.log('pipeline params:', params);
+      // console.log('pipeline params:', params);
 
       const query = [];
       Object.entries(params).forEach(d => query.push(`${d[0]}=${d[1]}`));
 
       // perform pipeline call to TA2
       const url = `/pipeline?${query.join('&')}`;
-      console.log('url: ', url);
+      // console.log('url: ', url);
 
       dispatch(requestPipelines());
       json(url).post({}, (resp) => {
-        //const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
+        // const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
         dispatch(receivePipelines(resp));
       })
-        .on('error', () => dispatch(setErrorMessage(
-          'There was an error running the pipelines...' // ${err.target.responseURL}
-        )));
+        .on('error', () => {
+          dispatch(setErrorMessage(
+            'There was an error running the pipelines...' // ${err.target.responseURL}
+          ));
+          dispatch(cancelPipelines());
+        });
     });
 };
 
@@ -210,13 +227,13 @@ export const getPipelinePredictions = (state, dispatch) => {
     return;
   }
 
-  //const context = state.ta2session.context.sessionId;
+  // const context = state.ta2session.context.sessionId;
   const dataURI = state.config.config.dataset_schema;
 
   state.selectedPipelines.map((ii) => {
     const d = state.pipelines.data[ii];
     const params = {
-      //context,
+      // context,
       pipeline: d.solutionId,
       data_uri: dataURI
     };
@@ -224,19 +241,19 @@ export const getPipelinePredictions = (state, dispatch) => {
     const query = [];
     Object.entries(params).forEach(a => query.push(`${a[0]}=${a[1]}`));
 
-    let url = `/pipeline/execute?${query.join('&')}`;
+    const url = `/pipeline/execute?${query.join('&')}`;
 
     dispatch(requestExecutedPipelines());
 
     json(url).post({}, (resp) => {
       const respComplete = resp;
-      console.log('executed was:', respComplete);
+      // console.log('executed was:', respComplete);
 
       respComplete.exposed.forEach((pipeline) => {
         // read the CSV results from the pipeline. First, extract the filename from the path,
         // then add the accessible directory and read the file
 
-        const csvUri = pipeline.exposedOutputs['outputs.0']['csvUri'];
+        const { csvUri } = pipeline.exposedOutputs['outputs.0'];
 
         // read the CSV data into an object and store it in redux
         const csvData = `pipeline/results?resultURI=${csvUri}`;
@@ -246,7 +263,7 @@ export const getPipelinePredictions = (state, dispatch) => {
           pipeline.fitted_solution_id = respComplete.fitted_solution_id[0];
           console.log('adding amazing solution id to pipeline: ', respComplete.fitted_solution_id[0]);
           pipeResults.push({ pipeline, data: predictedData });
-          console.log('pipe results length:',pipeResults.length);
+          // console.log('pipe results length:', pipeResults.length);
 
           // if this is the lastt callback to run, populate the state
           if (pipeResults.length === nn) {
@@ -260,7 +277,7 @@ export const getPipelinePredictions = (state, dispatch) => {
 };
 
 export const exportPipeline = (pipelineId, state) => {
-  //const context = state.ta2session.context.sessionId;
+  // const context = state.ta2session.context.sessionId;
   // get solution from state here
 
   const currentlyExecutedIds = state.executedPipelines.data.map(d => d.pipeline.solution_id);

@@ -11,7 +11,9 @@ import { LinearProgress } from 'material-ui/Progress';
 import { withStyles } from 'material-ui/styles';
 
 import ModelTable from './ModelTable';
-import { setTA2Port, runTA2, setPipelineProgress } from '../actions';
+import {
+  setTA2Port, setTA2Timeout, runTA2, setPipelineProgress
+} from '../actions';
 import ta2models from '../ta2models.json';
 
 const styles = theme => ({
@@ -41,11 +43,30 @@ const styles = theme => ({
   }
 });
 
+const timeouts = [
+  {
+    value: 60,
+    label: '1 minute'
+  },
+  {
+    value: 5 * 60,
+    label: '5 minutes'
+  },
+  {
+    value: 15 * 60,
+    label: '15 minutes'
+  },
+  {
+    value: 30 * 60,
+    label: '30 minutes'
+  }
+];
+
 class StepModel extends React.Component {
   componentDidMount() {
-    const ta2TimeRunning = 60; // number of seconds ta2 is configured to run
-    // this will cause the progress bar to increment such that it reaches
-    this.timer = setInterval(this.progress, (1000 * ta2TimeRunning) / 100);
+    // const ta2TimeRunning = 60; // number of seconds ta2 is configured to run
+    // this will cause the progress bar to increment such that it reaches 100% at timeout
+    // this.timer = setInterval(this.progress, (1000 * ta2TimeRunning) / 100);
   }
 
   componentWillUnmount() {
@@ -61,7 +82,8 @@ class StepModel extends React.Component {
 
   render() {
     const {
-      classes, ta2port, pipelines, state, handleChange, handleClick, pipelineProgress
+      classes, ta2port, ta2timeout, pipelines, state, handleChange,
+      handleTimeoutChange, handleClick, pipelineProgress
     } = this.props;
 
     return (
@@ -91,6 +113,26 @@ class StepModel extends React.Component {
             </Select>
             <FormHelperText>
               Select a TA2 modeling framework
+            </FormHelperText>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="model-timeout" />
+            <Select
+              value={ta2timeout}
+              onChange={event => handleTimeoutChange(event.target.value)}
+              inputProps={{
+                name: 'ta2timeout',
+                id: 'model-timeout'
+              }}
+            >
+              {timeouts.map(d => (
+                <MenuItem key={`item-${d.value}`} value={d.value}>
+                  {d.label}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              How long to train models
             </FormHelperText>
           </FormControl>
           {ta2port !== -1 ? (
@@ -133,10 +175,12 @@ class StepModel extends React.Component {
 StepModel.propTypes = {
   classes: PropTypes.object.isRequired,
   ta2port: PropTypes.number.isRequired,
+  ta2timeout: PropTypes.number.isRequired,
   pipelines: PropTypes.object.isRequired,
   pipelineProgress: PropTypes.number.isRequired,
   state: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleTimeoutChange: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
   handleProgress: PropTypes.func.isRequired
 };
@@ -144,6 +188,7 @@ StepModel.propTypes = {
 const mapStateToProps = state => (
   {
     ta2port: state.ta2port,
+    ta2timeout: state.ta2timeout,
     pipelines: state.pipelines,
     pipelineProgress: state.pipelineProgress,
     state
@@ -154,12 +199,19 @@ const mapDispatchToProps = dispatch => ({
   handleChange: (port) => {
     dispatch(setTA2Port(port));
   },
+  handleTimeoutChange: (timeout) => {
+    dispatch(setTA2Timeout(timeout));
+  },
   handleClick: (port, state) => {
     dispatch(setPipelineProgress(0));
+    this.timer = setInterval(this.progress, (1000 * state.ta2timeout) / 100);
     runTA2(port, dispatch, state);
   },
   handleProgress: (val) => {
     dispatch(setPipelineProgress(val));
+    if (val === 100) {
+      clearInterval(this.timer);
+    }
   }
 });
 

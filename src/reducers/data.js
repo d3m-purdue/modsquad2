@@ -3,7 +3,7 @@ import { REQUEST_CONFIG, RECEIVE_CONFIG, SET_DATA_SCHEMA,
   REQUEST_METADATA, RECEIVE_METADATA,
   REQUEST_PROBLEMS, RECEIVE_PROBLEMS,
   REQUEST_EXECUTED_PIPELINES, RECEIVE_EXECUTED_PIPELINES,
-  REQUEST_PIPELINES, RECEIVE_PIPELINES } from '../constants';
+  REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES } from '../constants';
 
 export const config = (state = {
   isFetching: false,
@@ -128,6 +128,12 @@ export const pipelines = (state = {
     case REQUEST_PIPELINES:
       return Object.assign({}, state, {
         isFetching: true,
+        isLoaded: false,
+        didInvalidate: false
+      });
+    case CANCEL_PIPELINES:
+      return Object.assign({}, state, {
+        isFetching: false,
         isLoaded: false,
         didInvalidate: false
       });

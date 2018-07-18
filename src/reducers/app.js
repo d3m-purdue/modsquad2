@@ -1,6 +1,6 @@
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
-  SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_SESSION,
-  SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES,
+  SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_TIMEOUT,
+  SET_TA2_SESSION, SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES,
   SET_PIPELINE_PROGRESS } from '../constants';
 
 export const errorMsg = (state = '', action) => {
@@ -57,9 +57,18 @@ export const exploreYVar = (state = '', action) => {
   return state;
 };
 
-export const ta2port = (state = -1, action) => {
+export const ta2port = (state = 50051, action) => {
   switch (action.type) {
     case SET_TA2_PORT:
+      return action.val;
+    default:
+  }
+  return state;
+};
+
+export const ta2timeout = (state = 60, action) => {
+  switch (action.type) {
+    case SET_TA2_TIMEOUT:
       return action.val;
     default:
   }

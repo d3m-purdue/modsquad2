@@ -64,7 +64,7 @@ const styles = theme => ({
   listContainer: {
     borderRight: '1px solid #efefef',
     overflowY: 'auto',
-    minWidth: 215,
+    minWidth: 215
   },
   contentContainer: {
     // width: 'calc(100% - 255px)',
@@ -209,7 +209,8 @@ const StepVariables = ({
           // createTrelliscopeSpec
           const newData = Object.assign([], [], data);
           for (let i = 0; i < newData.length; i += 1) {
-            newData[i].image_url = `22_handgeometry_dataset/media/${newData[i][variable]}`;
+            const fbase = newData[i][variable]; // .replace(/\.jpg$|\.png$/i, '');
+            newData[i].image_url = `http://localhost:8080/image?mediafile=${fbase}`;
           }
 
           const config = createTrelliscopeSpec({
