@@ -118,16 +118,16 @@ const StepVariables = ({
           Features in this Dataset
         </Typography>
         <Typography className={classes.p}>
-          The dataset associated with this problem has a number of describing attributes or "features". Each one takes on 
-          multiple values, and may or may not be related to the values of of other features. For each feature, we examine 
+          The dataset associated with this problem has a number of describing attributes or "features". Each one takes on
+          multiple values, and may or may not be related to the values of of other features. For each feature, we examine
           the range of values it takes on using different plots depending on the type of the variable.
         </Typography>
         <Typography className={classes.p}>
           For numeric variables (<span className={classes.chip2} style={{ background: chipColors['real'] }}>real</span> and <span className={classes.chip2} style={{ background: chipColors['integer'] }}>integer</span>), a histogram is displayed which shows how often the feature value falls within a set of ranges. This plot gives insight on the "distribution" of the feature's values. A companion plot, called a "Quantile plot", is next. The Quantile plot displays ALL the values this features takes -- displaying the values in order, from smallest to largest.
         </Typography>
         <Typography className={classes.p}>
-          For <span className={classes.chip2} style={{ background: chipColors['categorical'] }}>categorical</span> variables, 
-          a bar chart is displayed, which shows how frequently each value of the variable occurs in the data. If there are 
+          For <span className={classes.chip2} style={{ background: chipColors['categorical'] }}>categorical</span> variables,
+          a bar chart is displayed, which shows how frequently each value of the variable occurs in the data. If there are
           too many categories, only the top 15 will be shown.
         </Typography>
         <Typography className={classes.p}>
@@ -185,8 +185,8 @@ const StepVariables = ({
               <Tooltip
                 id="tooltip-icon"
                 title="The first plot is a histogram.  It shows the distribution of the values a variable takes on.  The histogram
-                counts up the feature values and maps the heights of the bars according to how many samples were within each value range. 
-                The second plot is often called a quantile plot.  It shows every value this feature takes on in the dataset, ordered from smallest to largest. 
+                counts up the feature values and maps the heights of the bars according to how many samples were within each value range.
+                The second plot is often called a quantile plot.  It shows every value this feature takes on in the dataset, ordered from smallest to largest.
                 "
               >
                 <IconButton aria-label="Help">
@@ -217,7 +217,7 @@ const StepVariables = ({
           const newData = Object.assign([], [], data);
           for (let i = 0; i < newData.length; i += 1) {
             const fbase = newData[i][variable]; // .replace(/\.jpg$|\.png$/i, '');
-            newData[i].image_url = `http://localhost:8080/image?mediafile=${fbase}`;
+            newData[i].image_url = `/image?mediafile=${fbase}`;
           }
 
           const config = createTrelliscopeSpec({
