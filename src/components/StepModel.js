@@ -63,14 +63,20 @@ const timeouts = [
 ];
 
 class StepModel extends React.Component {
-  componentDidMount() {
-    // const ta2TimeRunning = 60; // number of seconds ta2 is configured to run
-    // this will cause the progress bar to increment such that it reaches 100% at timeout
-    // this.timer = setInterval(this.progress, (1000 * ta2TimeRunning) / 100);
-  }
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.pipelines.isFetching & !prevProps.pipelines.isFetching) {
+      this.timer = setInterval(this.progress, (1000 * this.props.ta2timeout) / 100);
+    }
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
+    if (this.props.pipelineProgress === 100) {
+      clearInterval(this.timer);
+    }
+
+    // make sure to clearInterval if there was a failure in calling the service
+    if (!this.props.pipelines.isFetching & prevProps.pipelines.isFetching & !this.props.pipelines.loaded) {
+      clearInterval(this.timer);
+    }
   }
 
   progress = () => {
@@ -93,27 +99,27 @@ class StepModel extends React.Component {
         </Typography>
         <Typography className={classes.p}>
           Choose a modeling engine to use below.  To do this, please select the arrove above where the interface says
-           'Select a modeling engine'.  You will then be presented with one or more options to choose from.  
-           Please select an engine to use by clicking on its name, even if only one engine option is presented.  
-           When the TRAIN button becomes highlighted in blue, please click it to begin the training process.  
-           This will tell the modeling engine to train itself on the dataset and generate one or more candidate solutions 
+           'Select a modeling engine'.  You will then be presented with one or more options to choose from.
+           Please select an engine to use by clicking on its name, even if only one engine option is presented.
+           When the TRAIN button becomes highlighted in blue, please click it to begin the training process.
+           This will tell the modeling engine to train itself on the dataset and generate one or more candidate solutions
            to the problem you are studying.
         </Typography>
         <Typography className={classes.p}>
-        The automated training could take a few minutes, depending on size and complexity of the problem being estimated.  
-        The modeling engine will try several different approaches that predict the values of the target variable. 
-        If this process is successful, you will be presented with a table of ranked options to further explore below.  
-        To explore the resulting predictions, select one or more rows of the table by clicking the box on the left of the 
-        row and then select the NEXT button at the bottom of the interface. 
+        The automated training could take a few minutes, depending on size and complexity of the problem being estimated.
+        The modeling engine will try several different approaches that predict the values of the target variable.
+        If this process is successful, you will be presented with a table of ranked options to further explore below.
+        To explore the resulting predictions, select one or more rows of the table by clicking the box on the left of the
+        row and then select the NEXT button at the bottom of the interface.
         </Typography>
         <Typography className={classes.p}>
-        Please feel free to go back and forth, 
-        selecting and reviewing different solutions until you have settled on a few of the overall best proposed solutions.  
+        Please feel free to go back and forth,
+        selecting and reviewing different solutions until you have settled on a few of the overall best proposed solutions.
         When you are ready to indicate your selections of the  best candidates, click the button marked
         EXPORT for each of your best solutions in order: with the best Exported first, then the second best, continuing
         until you have selected at least the best three to be scored. After selection is complete, your job is finished! Please proceed to the Quit
-         panel and end your session. 
-        </Typography>    
+         panel and end your session.
+        </Typography>
 
         <form autoComplete="off" className={classes.form}>
           <FormControl className={classes.formControl}>
@@ -171,7 +177,7 @@ class StepModel extends React.Component {
               <LinearProgress variant="determinate" value={pipelineProgress} />
               <br />
               <Typography>
-                Running models...
+                {`Running models (${pipelineProgress}%, ${Math.floor(10 * (1 - (pipelineProgress / 100)) * ta2timeout / 60) / 10} minutes remaining)...`}
               </Typography>
             </div>
           ) : ''}
@@ -225,14 +231,10 @@ const mapDispatchToProps = dispatch => ({
   },
   handleClick: (port, state) => {
     dispatch(setPipelineProgress(0));
-    this.timer = setInterval(this.progress, (1000 * state.ta2timeout) / 100);
     runTA2(port, dispatch, state);
   },
   handleProgress: (val) => {
     dispatch(setPipelineProgress(val));
-    if (val === 100) {
-      clearInterval(this.timer);
-    }
   }
 });
 
