@@ -111,10 +111,15 @@ const StepModelResults = ({
     let helperText = '';
 
     if (determineProblemType(problems[0].metrics[0].metric) === 'classification') {
+      const uYVar = [];
       for (let i = 0; i < data.length; i += 1) {
         // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
-        data[i].Predicted = parseFloat(datLookup[data[i].d3mIndex]);
+        data[i].Predicted = datLookup[data[i].d3mIndex];
+        if (uYVar.indexOf(data[i][yvar]) === -1) {
+          uYVar.push(data[i][yvar]);
+        }
       }
+      uYVar.sort();
 
       helperText = (
         <div>
@@ -122,9 +127,9 @@ const StepModelResults = ({
             The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with respect to the target variable, we can view a "confusion matrix" heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
           </Typography>
           <Typography className={classes.p}>
-            This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable, 
+            This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable,
             a brighter diagonal pattern from the top left to the bottom right should be present in the heatmap. Each value the target variable takes on
-            is listed along the bottom of the heatmap.  
+            is listed along the bottom of the heatmap.
           </Typography>
         </div>
       );
@@ -136,6 +141,8 @@ const StepModelResults = ({
           yField="Predicted"
           width={550}
           height={400}
+          xDomain={uYVar}
+          yDomain={uYVar}
           normCols
           normRows={false}
         />
@@ -151,12 +158,12 @@ const StepModelResults = ({
       helperText = (
         <div>
           <Typography className={classes.p}>
-           The model engine returns a set of predicted values, from which we can compute residuals, which are the actual 
-           observed values subtracted from the predicted values. If a model fits well, the residuals should visually 
+           The model engine returns a set of predicted values, from which we can compute residuals, which are the actual
+           observed values subtracted from the predicted values. If a model fits well, the residuals should visually
            not exhibit any kind of pattern, and should appear as random noise.
           </Typography>
           <Typography className={classes.p}>
-          It is useful to visualize the residuals vs. the predicted values and also vs. all of the other variables 
+          It is useful to visualize the residuals vs. the predicted values and also vs. all of the other variables
           in the data to look for patterns. In all of these plots, the residuals should vary randomly around zero.
           </Typography>
         </div>
