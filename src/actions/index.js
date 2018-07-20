@@ -220,11 +220,17 @@ export const runTA2 = (port, dispatch, state) => {
     });
 };
 
+
 export const getPipelinePredictions = (state, dispatch) => {
   const pipeResults = [];
   const nn = state.selectedPipelines.length;
   if (nn === 0) {
     return;
+  }
+
+  // for cache
+  if (!window.__pipepredictcache__) {
+    window.__pipepredictcache__ = {};
   }
 
   // const context = state.ta2session.context.sessionId;
@@ -245,7 +251,7 @@ export const getPipelinePredictions = (state, dispatch) => {
 
     dispatch(requestExecutedPipelines());
 
-    json(url).post({}, (resp) => {
+    const cb = (resp) => {
       const respComplete = resp;
       // console.log('executed was:', respComplete);
 
@@ -271,7 +277,16 @@ export const getPipelinePredictions = (state, dispatch) => {
           }
         });
       });
-    });
+    };
+
+    if (window.__pipepredictcache__[d.solutionId] === undefined) {
+      json(url).post({}, (resp) => {
+        window.__pipepredictcache__[d.solutionId] = resp;
+        cb(resp);
+      });
+    } else {
+      cb(window.__pipepredictcache__[d.solutionId]);
+    }
     return null;
   });
 };
