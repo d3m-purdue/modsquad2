@@ -100,7 +100,7 @@ const Histogram = ({
     ],
 
     "axes": [
-      {"orient": "bottom", "scale": "xscale", "tickCount": 10},
+      {"orient": "bottom", "scale": "xscale", "tickCount": 10,"labelOverlap":true},
       {"orient": "bottom", "scale": "xscale-null"},
       {"orient": "left", "scale": "yscale", "tickCount": 5, "offset": 5}
     ],

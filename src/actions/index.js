@@ -189,7 +189,8 @@ export const runTA2 = (port, dispatch, state) => {
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
         // context,
-        data_uri: dataURI
+        data_uri: dataURI,
+        time_limit: (state.ta2timeout/60)
         // task_type: taskType,
         // task_subtype: taskSubType,
         // metrics,

@@ -212,7 +212,22 @@ const StepVariables = ({
         );
       } else if (varType === 'string') {
         // check to see if it's an image
-        if (data[0][variable].match('jpg$|png$') !== null) {
+        if (data[0][variable].match('jpg$|png$') == null) {
+          // this is a string but treat it like a categorical variable
+          content = (
+          <div>
+            <Typography variant="headline" className={classes.title2}>
+              Bar Chart
+            </Typography>
+            <Barchart
+              data={data}
+              field={variable}
+              width={620}
+              height={300}
+            />
+          </div>
+        );
+        } else {
           // createTrelliscopeSpec
           const newData = Object.assign([], [], data);
           for (let i = 0; i < newData.length; i += 1) {

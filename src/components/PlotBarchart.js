@@ -56,6 +56,10 @@ const Barchart = ({
       {
         "orient": "bottom",
         "scale": "xscale",
+        "labelAngle": 30,
+        "labelAlign":"left",
+        "labelOverlap": false,
+        "labelFlush": true,
         "properties": {
           "labels": {
             "angle": { "value": 50 }

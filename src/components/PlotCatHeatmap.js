@@ -104,7 +104,7 @@ const CatHeatmap = ({
     ],
 
     "axes": [
-      {"orient": "bottom", "scale": "xscale", "title": xField},
+      {"orient": "bottom", "scale": "xscale", "title": xField, "labelAngle": 30,"labelAlign":'left'},
       {"orient": "left", "scale": "yscale", "title": yField}
     ],
 
