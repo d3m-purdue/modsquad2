@@ -215,24 +215,27 @@ const StepVariables = ({
         if (data[0][variable].match('jpg$|png$') == null) {
           // this is a string but treat it like a categorical variable
           content = (
-          <div>
-            <Typography variant="headline" className={classes.title2}>
-              Bar Chart
-            </Typography>
-            <Barchart
-              data={data}
-              field={variable}
-              width={620}
-              height={300}
-            />
-          </div>
-        );
+            <div>
+              <Typography variant="headline" className={classes.title2}>
+                Bar Chart
+              </Typography>
+              <Barchart
+                data={data}
+                field={variable}
+                width={620}
+                height={300}
+              />
+            </div>
+          );
         } else {
           // createTrelliscopeSpec
           const newData = Object.assign([], [], data);
           for (let i = 0; i < newData.length; i += 1) {
             const fbase = newData[i][variable]; // .replace(/\.jpg$|\.png$/i, '');
             newData[i].image_url = `/image?mediafile=${fbase}`;
+            if (newData[i].bounding_box !== undefined) {
+              newData[i].image_url = `${newData[i].image_url}&bbox=${newData[i].bounding_box}`;
+            }
           }
 
           const config = createTrelliscopeSpec({
@@ -245,7 +248,7 @@ const StepVariables = ({
             nrow: 2,
             ncol: 3,
             panelCol: 'image_url',
-            panelKey: variable,
+            panelKey: 'd3mIndex',
             labels: [variable],
             // sort: [{ order: 1, name: variable, dir: 'asc' }],
             updated: '2018-02-08 04:43:24',
