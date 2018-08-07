@@ -47,21 +47,19 @@ const timeouts = [
   {
     value: 60,
     label: '1 minute'
-  }
-  /**,
+  },
+  {
+    value: 2 * 60,
+    label: '2 minutes'
+  },
+  {
+    value: 3 * 60,
+    label: '3 minutes'
+  },
   {
     value: 5 * 60,
     label: '5 minutes'
-  },
-  {
-    value: 15 * 60,
-    label: '15 minutes'
-  },
-  {
-    value: 30 * 60,
-    label: '30 minutes'
   }
-  **/
 ];
 
 class StepModel extends React.Component {

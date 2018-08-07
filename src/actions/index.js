@@ -190,7 +190,8 @@ export const runTA2 = (port, dispatch, state) => {
       const params = {
         // context,
         data_uri: dataURI,
-        time_limit: (state.ta2timeout/60)
+        time_limit: (state.ta2timeout/60),
+        inactive: state.inactiveVariables
         // task_type: taskType,
         // task_subtype: taskSubType,
         // metrics,
