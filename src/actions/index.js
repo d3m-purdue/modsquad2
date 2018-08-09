@@ -2,7 +2,7 @@ import { json, csv } from 'd3-request';
 import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_TIMEOUT,
   SET_INACTIVE_VARIABLES, SET_SELECTED_PIPELINES,
-  SET_ACTIVE_RESULT_INDEX, SET_PIPELINE_PROGRESS,
+  SET_ACTIVE_RESULT_ID, SET_PIPELINE_PROGRESS, SET_EXPORTED_PIPELINES,
   REQUEST_EXECUTED_PIPELINES, RECEIVE_EXECUTED_PIPELINES,
   REQUEST_CONFIG, RECEIVE_CONFIG, SET_DATA_SCHEMA,
   REQUEST_ACTIVE_DATA, RECEIVE_ACTIVE_DATA,
@@ -98,6 +98,10 @@ export const setSelectedPipelines = val => ({
   type: SET_SELECTED_PIPELINES, val
 });
 
+export const setExportedPipelines = val => ({
+  type: SET_EXPORTED_PIPELINES, val
+});
+
 export const setInactiveVariables = val => ({
   type: SET_INACTIVE_VARIABLES, val
 });
@@ -116,8 +120,8 @@ export const setTA2Session = val => ({
   type: SET_TA2_SESSION, val
 });
 
-export const setActiveResultIndex = val => ({
-  type: SET_ACTIVE_RESULT_INDEX, val
+export const setActiveResultId = val => ({
+  type: SET_ACTIVE_RESULT_ID, val
 });
 
 export const setPipelineProgress = val => ({
@@ -238,8 +242,9 @@ export const getPipelinePredictions = (state, dispatch) => {
   // const context = state.ta2session.context.sessionId;
   const dataURI = state.config.config.dataset_schema;
 
-  state.selectedPipelines.map((ii) => {
-    const d = state.pipelines.data[ii];
+  const allIds = state.pipelines.data.map(d => d.solutionId);
+  state.selectedPipelines.map((id) => {
+    const d = state.pipelines.data[allIds.indexOf(id)];
     const params = {
       // context,
       pipeline: d.solutionId,
@@ -298,9 +303,11 @@ export const exportPipeline = (pipelineId, state) => {
   // get solution from state here
 
   const currentlyExecutedIds = state.executedPipelines.data.map(d => d.pipeline.solution_id);
-
   const idx = currentlyExecutedIds.indexOf(pipelineId);
+  // const currentlyExecutedIds = Object.keys(window.__pipepredictcache__);
+
   const fittedId = state.executedPipelines.data[idx].pipeline.fitted_solution_id;
+  // const fittedId = window.__pipepredictcache__[pipelineId].fitted_solution_id;
 
   const params = {
     pipeline: fittedId

@@ -1,7 +1,9 @@
-import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
+import {
+  SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_TIMEOUT,
-  SET_TA2_SESSION, SET_ACTIVE_RESULT_INDEX, SET_INACTIVE_VARIABLES,
-  SET_PIPELINE_PROGRESS } from '../constants';
+  SET_TA2_SESSION, SET_ACTIVE_RESULT_ID, SET_INACTIVE_VARIABLES,
+  SET_PIPELINE_PROGRESS, SET_EXPORTED_PIPELINES
+} from '../constants';
 
 export const errorMsg = (state = '', action) => {
   switch (action.type) {
@@ -75,9 +77,9 @@ export const ta2timeout = (state = 60, action) => {
   return state;
 };
 
-export const activeResultIndex = (state = 0, action) => {
+export const activeResultIndex = (state = '', action) => {
   switch (action.type) {
-    case SET_ACTIVE_RESULT_INDEX:
+    case SET_ACTIVE_RESULT_ID:
       return action.val;
     default:
   }
@@ -96,6 +98,15 @@ export const ta2session = (state = {}, action) => {
 export const inactiveVariables = (state = [], action) => {
   switch (action.type) {
     case SET_INACTIVE_VARIABLES:
+      return Object.assign([], [], action.val);
+    default:
+  }
+  return state;
+};
+
+export const exportedPipelines = (state = [], action) => {
+  switch (action.type) {
+    case SET_EXPORTED_PIPELINES:
       return Object.assign([], [], action.val);
     default:
   }

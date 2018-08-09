@@ -13,7 +13,7 @@ import Scatter from './PlotScatter';
 import BoxPlot from './PlotBox';
 import CatHeatmap from './PlotCatHeatmap';
 
-import { setActiveResultIndex } from '../actions';
+import { setActiveResultId } from '../actions';
 
 
 const determineProblemType = (metric) => {
@@ -77,27 +77,49 @@ const StepModelResults = ({
       <div className={classes.loadingDiv}>
         <LinearProgress />
         <br />
-        <Typography>Getting model predictions...</Typography>
+        <Typography>
+          Getting model predictions...
+        </Typography>
       </div>
     );
   }
 
   if (pdata.isLoaded === false) {
     return (
-      <Typography>Please select pipeline results from the previous step.</Typography>
+      <Typography>
+        Please select pipeline results from the previous step.
+      </Typography>
     );
   }
 
   let dat;
   let yvar;
-
-  if (pdata && pdata.data) {
-    selected = Math.min(selected,pdata.data.length-1)
+  let sel = selected;
+  if (sel === '') {
+    sel = selectedPipelines[0];
   }
 
-  if ( pdata && pdata.data && pdata.data[selected] && pdata.data[selected].data) {
+  if (pdata && pdata.data) {
+    const allIds = pdata.data.map(d => d.pipeline.solution_id);
+    const idx = allIds.indexOf(sel);
 
-    dat = pdata.data[selected].data;
+    // if (!(pdata.data[idx] && pdata.data[idx].data)) {
+    //   return (
+    //     <Typography>
+    //       We had trouble processing the results from this solution attempt. Please try a different solution candidate.
+    //     </Typography>
+    //   );
+    // }
+    if (idx === -1) {
+      return (
+        <Typography>
+          We had trouble processing the results from this solution attempt. Please try a different solution candidate.
+        </Typography>
+      );
+    }
+
+debugger;
+    dat = pdata.data[idx].data;
     yvar = problems[0].targets[0].colName;
 
     const datLookup = {};
@@ -112,9 +134,15 @@ const StepModelResults = ({
 
     if (determineProblemType(problems[0].metrics[0].metric) === 'classification') {
       const uYVar = [];
+      const newData = [];
       for (let i = 0; i < data.length; i += 1) {
         // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
-        data[i].Predicted = datLookup[data[i].d3mIndex];
+        const tmp = {
+          Predicted: datLookup[data[i].d3mIndex]
+        };
+        tmp[yvar] = data[i][yvar];
+        newData.push(tmp);
+        // data[i].Predicted = datLookup[data[i].d3mIndex];
         if (uYVar.indexOf(data[i][yvar]) === -1) {
           uYVar.push(data[i][yvar]);
         }
@@ -136,7 +164,7 @@ const StepModelResults = ({
 
       plots = (
         <CatHeatmap
-          data={data}
+          data={newData}
           xField={yvar}
           yField="Predicted"
           width={550}
@@ -214,6 +242,8 @@ const StepModelResults = ({
       );
     }
 
+    const allPIds = pipelines.data.map(d => d.solutionId);
+
     return (
       <div className={classes.root}>
         <Typography variant="headline" className={classes.title}>
@@ -224,20 +254,22 @@ const StepModelResults = ({
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="variable-input">Candidate Solution</InputLabel>
             <Select
-              value={selected}
+              value={sel}
               onChange={event => handleChange(event.target.value)}
               inputProps={{
                 name: 'pipeline',
                 id: 'pipeline-input'
               }}
             >
-              {selectedPipelines.map((d,i) => (
-                <MenuItem key={`item-${i}`} value={i}>
-                  {pipelines.data[d].solutionId}
+              {selectedPipelines.map((d, i) => (
+                <MenuItem key={`item-${i}`} value={d}>
+                  {pipelines.data[allPIds.indexOf(d)].solutionId}
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>Select a solution result to visualize</FormHelperText>
+            <FormHelperText>
+              Select a solution result to visualize
+            </FormHelperText>
           </FormControl>
         </form>
         <div className={classes.plotContainer}>
@@ -246,7 +278,7 @@ const StepModelResults = ({
       </div>
     );
   } else {
-    console.log('data returned from model was empty?')
+    console.log('data returned from model was empty?');
     return (
       <Typography>
       We had trouble processing the results from this solution attempt.  Please try a different solution candidate.
@@ -261,7 +293,7 @@ StepModelResults.propTypes = {
   meta: PropTypes.array.isRequired,
   pdata: PropTypes.object.isRequired,
   problems: PropTypes.array.isRequired,
-  selected: PropTypes.number.isRequired,
+  selected: PropTypes.string.isRequired,
   pipelines: PropTypes.object.isRequired,
   selectedPipelines: PropTypes.array.isRequired,
   handleChange: PropTypes.func.isRequired
@@ -281,7 +313,7 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => ({
   handleChange: (val) => {
-    dispatch(setActiveResultIndex(val));
+    dispatch(setActiveResultId(val));
   }
 });
 

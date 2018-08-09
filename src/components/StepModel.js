@@ -12,7 +12,8 @@ import { withStyles } from 'material-ui/styles';
 
 import ModelTable from './ModelTable';
 import {
-  setTA2Port, setTA2Timeout, runTA2, setPipelineProgress
+  setTA2Port, setTA2Timeout, runTA2, setPipelineProgress,
+  setSelectedPipelines, setActiveResultId
 } from '../actions';
 import ta2models from '../ta2models.json';
 
@@ -65,16 +66,23 @@ const timeouts = [
 class StepModel extends React.Component {
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
-    if (this.props.pipelines.isFetching & !prevProps.pipelines.isFetching) {
+    if (this.props.pipelines.isFetching && !prevProps.pipelines.isFetching) {
       this.timer = setInterval(this.progress, (1000 * this.props.ta2timeout) / 100);
     }
 
-    if (this.props.pipelineProgress === 100) {
+    if (
+      this.props.pipelineProgress === 100 ||
+      (this.props.pipelineProgress === prevProps.pipelineProgress && prevProps.pipelineProgress > 0)
+    ) {
       clearInterval(this.timer);
     }
 
     // make sure to clearInterval if there was a failure in calling the service
-    if (!this.props.pipelines.isFetching & prevProps.pipelines.isFetching & !this.props.pipelines.loaded) {
+    if (
+      !this.props.pipelines.isFetching
+      && prevProps.pipelines.isFetching
+      && !this.props.pipelines.loaded
+    ) {
       clearInterval(this.timer);
     }
   }
@@ -88,8 +96,8 @@ class StepModel extends React.Component {
 
   render() {
     const {
-      classes, ta2port, ta2timeout, pipelines, state, handleChange,
-      handleTimeoutChange, handleClick, pipelineProgress
+      classes, ta2port, ta2timeout, pipelines, state,
+      handleChange, handleTimeoutChange, handleClick, pipelineProgress
     } = this.props;
 
     return (
@@ -172,7 +180,7 @@ class StepModel extends React.Component {
               Train
             </Button>
           ) : ''}
-          {pipelines.isFetching === true & pipelineProgress !== 100 ? (
+          {pipelines.isFetching === true && pipelineProgress !== 100 ? (
             <div className={classes.loadingDiv}>
               <LinearProgress variant="determinate" value={pipelineProgress} />
               <br />
@@ -191,7 +199,9 @@ class StepModel extends React.Component {
             </div>
           ) : ''}
           {pipelines.isLoaded === true ? (
-            <ModelTable data={pipelines.data} />
+            <ModelTable
+              data={pipelines.data}
+            />
           ) : ''}
         </form>
       </div>
@@ -231,6 +241,8 @@ const mapDispatchToProps = dispatch => ({
   },
   handleClick: (port, state) => {
     dispatch(setPipelineProgress(0));
+    dispatch(setSelectedPipelines([]));
+    dispatch(setActiveResultId(''));
     runTA2(port, dispatch, state);
   },
   handleProgress: (val) => {

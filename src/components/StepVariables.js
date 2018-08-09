@@ -137,22 +137,26 @@ const StepVariables = ({
     );
   } else {
     let varType = '';
+    let targetIdx = -1;
     for (let i = 0; i < meta.length; i += 1) {
       if (meta[i].colName === variable) {
         varType = meta[i].colType;
+        targetIdx = meta[i].role.indexOf('suggestedTarget');
         break;
       }
     }
     if (varType !== '') {
-      switchContent = (
-        <Typography>
-        Include this variable in the analysis
-          <Switch
-            checked={inactiveVars.indexOf(variable) === -1}
-            onChange={() => handleSwitch(variable, inactiveVars)}
-          />
-        </Typography>
-      );
+      if (targetIdx === -1) {
+        switchContent = (
+          <Typography>
+          Include this variable in the analysis
+            <Switch
+              checked={inactiveVars.indexOf(variable) === -1}
+              onChange={() => handleSwitch(variable, inactiveVars)}
+            />
+          </Typography>
+        );
+      }
 
       if (varType === 'integer' || varType === 'real') {
         content = (
