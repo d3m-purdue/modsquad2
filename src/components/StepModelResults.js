@@ -124,12 +124,21 @@ const StepModelResults = ({
       helperText = (
         <div>
           <Typography className={classes.p}>
-            The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with respect to the target variable, we can view a "confusion matrix" heatmap showing, for each possible value of the observed target variable, the proportion of times the prediction fell into each possible value.
+            The prediction algorithm returns a set of predicted values. To help assess how the algorithm has performed with 
+            respect to the target variable, we display a heatmap showing, for each possible value of the observed target variable, 
+            the proportion of times the prediction fell into each possible value. See the possible values along the vertical axes on the left. 
+            The actual target variable values are arranged along the bottom axis.  Each vertical column for a particular value
+            of the target variable represents the values the modeling engine predicted for the particular target variable value.  Looking at the legend on the right
+            shows how the different prediction values are distributed.  
+          
           </Typography>
           <Typography className={classes.p}>
             This visualization helps to assess whether there are certain values of the target variable that are predicted better than other values. If the model is doing well for all values of the target variable,
             a brighter diagonal pattern from the top left to the bottom right should be present in the heatmap. Each value the target variable takes on
-            is listed along the bottom of the heatmap.
+            is listed along the bottom of the heatmap.  Any white regions on the chart correspond to predicted values that never occurred.
+          </Typography>
+          <Typography className={classes.p}>
+           When you have decided which solution is the best, please don't forget to go back to the previous step and hit EXPORT on the proper solution.
           </Typography>
         </div>
       );
