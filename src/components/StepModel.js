@@ -114,14 +114,21 @@ class StepModel extends React.Component {
            to the problem you are studying.
         </Typography>
         <Typography className={classes.p}>
+          After selecting the TRAIN button, the button should turn gray and a progress bar should appear.  On occasion the progress bar
+          does not happen.  In this case, please just refresh/reload the browser page, and try the TRAIN process again. 
+        </Typography>
+
+        <Typography className={classes.p}>
         The automated training could take a few minutes, depending on size and complexity of the problem being estimated.
         The modeling engine will try several different approaches that predict the values of the target variable.
         If this process is successful, you will be presented with a table of ranked options to further explore below.
         To explore the resulting predictions, select one or more rows of the table by clicking the box on the left of the
-        row and then select the NEXT button at the bottom of the interface.
+        row and then select the NEXT button at the bottom of the interface.  If the dataset has many values, processing
+        can take a long time even after the interface says 'Fetching Results'.  Please be patient.  If an error occurs in 
+        calculating the solution, a black warning message will appear explaining an error has occurred.
         </Typography>
         <Typography className={classes.p}>
-        Please feel free to go back and forth,
+        Please go back and forth,
         selecting and reviewing different solutions until you have settled on a few of the overall best proposed solutions.
         When you are ready to indicate your selections of the  best candidates, click the button marked
         EXPORT for each of your best solutions in order: with the best Exported first, then the second best, continuing
