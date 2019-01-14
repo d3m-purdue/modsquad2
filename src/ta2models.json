@@ -1,8 +1,8 @@
 [
-{
-  "name": "BlindPaired",
-  "display": "FeatureLabs Modeling (TA2)",
-  "port": 45042,
-  "description": "This is the open slot for any program TA2 to be paired with ModSquad"
-}
+  {
+    "name": "Feature Labs Modeling Engine",
+    "display": "FeatureLabs Modeling ",
+    "port": 50051,
+    "description": "This is the open slot for any program TA2 to be paired with ModSquad"
+  }
 ]

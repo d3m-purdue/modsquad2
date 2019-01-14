@@ -6,9 +6,10 @@ import map from 'lodash.map';
 import filter from 'lodash.filter';
 
 const CatHeatmap = ({
-  data, xField, yField, width, height, normCols, normRows
+  data, xField, yField, width, height, normCols, normRows, xDomain, yDomain
 }) => {
   const agg = countBy(data, d => `${d[xField]}___${d[yField]}`);
+
   const dat = map(agg, (value, prop) => {
     const tmp = prop.split('___');
     return ({
@@ -51,6 +52,21 @@ const CatHeatmap = ({
   const topY = getTopN(data, yField, 15);
   const datf = filter(dat, d => topX.indexOf(d.var1) >= 0 && topY.indexOf(d.var2) >= 0);
 
+  let colorDomain = { data: "table", field: "n" };
+  if (normCols === true || normRows === true) {
+    colorDomain = [0, 1];
+  }
+
+  let xDomain2 = xDomain;
+  if (xDomain2 === undefined) {
+    xDomain2 = { data: 'table', field: 'var1' }
+  }
+
+  let yDomain2 = yDomain;
+  if (yDomain2 === undefined) {
+    yDomain2 = { data: 'table', field: 'var2' }
+  }
+
   /* eslint-disable */
   const spec = {
     "$schema": "https://vega.github.io/schema/vega/v3.0.json",
@@ -69,26 +85,26 @@ const CatHeatmap = ({
       {
         "name": "xscale",
         "type": "band",
-        "domain": {"data": "table", "field": "var1"},
+        "domain": xDomain2,
         "range": "width"
       },
       {
         "name": "yscale",
         "type": "band",
-        "domain": {"data": "table", "field": "var2"},
+        "domain": yDomain2,
         "range": "height"
       },
       {
         "name": "color",
         "type": "sequential",
         "range": {"scheme": "viridis"},
-        "domain": {"data": "table", "field": "n"},
+        "domain": colorDomain,
         "zero": false, "nice": false
       }
     ],
 
     "axes": [
-      {"orient": "bottom", "scale": "xscale", "title": xField},
+      {"orient": "bottom", "scale": "xscale", "title": xField, "labelAngle": 30,"labelAlign":'left'},
       {"orient": "left", "scale": "yscale", "title": yField}
     ],
 
@@ -131,7 +147,14 @@ CatHeatmap.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   normRows: PropTypes.bool.isRequired,
-  normCols: PropTypes.bool.isRequired
+  normCols: PropTypes.bool.isRequired,
+  xDomain: PropTypes.array,
+  yDomain: PropTypes.array
+};
+
+CatHeatmap.defaultProps = {
+  xDomain: undefined,
+  yDomain: undefined
 };
 
 export default CatHeatmap;

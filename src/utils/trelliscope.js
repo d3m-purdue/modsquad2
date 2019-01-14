@@ -131,7 +131,8 @@ const createTrelliscopeSpec = (spec) => {
 
   // add panelKey to data (repeat of panelCol)
   for (let i = 0; i < data.length; i += 1) {
-    data[i].panelKey = data[i][panelKey].replace(/\./g, '_');
+    // data[i].panelKey = data[i][panelKey].replace(/\./g, '_');
+    data[i].panelKey = data[i][panelKey];
   }
 
   const colNames = Object.keys(data[0]);

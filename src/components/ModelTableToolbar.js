@@ -44,7 +44,7 @@ const ModelTableToolbar = (props) => {
         {numSelected > 0 ? (
           <Typography variant="subheading">{numSelected} selected</Typography>
         ) : (
-          <Typography variant="title">TA2 Model Results</Typography>
+          <Typography variant="title">Model Engine Results</Typography>
         )}
       </div>
     </Toolbar>
