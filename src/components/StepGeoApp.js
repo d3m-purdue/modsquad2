@@ -32,7 +32,7 @@ const StepGeoApp = ({ classes }) => (
       When you are finished exploring, continue by clicking Next
     </Typography>
 
-    <Iframe url="http://localhost:8001"
+    <Iframe url="https://purdue-geoapp.datadrivendiscovery.org"
         width="1100px"
         height="700px"
         id="myId"

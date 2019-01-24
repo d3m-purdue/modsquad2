@@ -8,7 +8,8 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   REQUEST_ACTIVE_DATA, RECEIVE_ACTIVE_DATA,
   REQUEST_METADATA, RECEIVE_METADATA,
   REQUEST_PROBLEMS, RECEIVE_PROBLEMS,
-  REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES } from '../constants';
+  REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES,
+  REQUEST_EXTERNAL_DATASET_LIST, RECEIVE_EXTERNAL_DATASET_LIST } from '../constants';
 
 export const setActiveStep = val => ({
   type: SET_ACTIVE_STEP,
@@ -132,12 +133,26 @@ export const setErrorMessage = msg => ({
   type: SET_ERROR_MESSAGE, msg
 });
 
-// The prefix valus with api/v1/modsquad is for the new girder plugin.  The 
+// added Jan 2019 for the external file operations
+
+export const requestExternalDatasetList = val => ({
+  type: REQUEST_EXTERNAL_DATASET_LIST, val
+});
+
+export const receiveExternalDatasetList = dat => ({
+  type: RECEIVE_EXTERNAL_DATASET_LIST,
+  data: dat,
+  receivedAt: Date.now()
+});
+
+
+// The prefix values with api/v1/modsquad are for the new girder plugin.  The 
 // alternative (with now path prefexi) is for the previous tangelo back-end.
 // Select the prefix needed according to the back end in use. 
 
 export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
 //export const ajaxPrefix= 'http://localhost:8080'
+
 
 export const fetchConfig = (config = ajaxPrefix+'/config') =>
   (dispatch) => {
@@ -180,22 +195,7 @@ export const runTA2 = (port, dispatch, state) => {
     .post({}, (session) => {
       const dataURI = state.config.config.dataset_schema;
       // const targetFeatures = state.problems.data[0].targets;
-      // const { taskType } = state.problems.data[0];
-      // const { taskSubType } = state.problems.data[0];
-
-      // predict_features is currently ignored
-      // Later user will be able to select features to use during prediction
-
-      // const predictFeatures = [];
-
-      // just pass the first metric. Several TA2s currently only support a single metric
-
-      // const {metrics} = state.problems.data[0];
-      // const maxPipelines = 5;
-
-      // const context = session.context.sessionId;
-
-      // dispatch(setTA2Session(session));
+      
 
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
@@ -204,10 +204,6 @@ export const runTA2 = (port, dispatch, state) => {
         time_limit: (state.ta2timeout/60),
         inactive: state.inactiveVariables
         // task_type: taskType,
-        // task_subtype: taskSubType,
-        // metrics,
-        // target_features: targetFeatures,
-        // predict_features: predictFeatures,
         // max_pipelines: maxPipelines
       };
       // console.log('pipeline params:', params);
@@ -329,4 +325,15 @@ export const exportPipeline = (pipelineId, state) => {
     console.log('export pipeline response:');
     console.log(resp);
   });
+};
+
+
+// functions to dispatch the actions added for reading from external data list
+export const getExternalDatasetList = (externalDataList = ajaxPrefix+'/dataset/external_list') =>
+  (dispatch) => {
+    dispatch(requestExternalDatasetList());
+
+    json(externalDataList, (dlist) => {
+      dispatch(receiveExternalDatasetList(dlist.datasets));
+    });
 };
