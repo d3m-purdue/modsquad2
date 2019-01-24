@@ -132,7 +132,14 @@ export const setErrorMessage = msg => ({
   type: SET_ERROR_MESSAGE, msg
 });
 
-export const fetchConfig = (config = '/config') =>
+// The prefix valus with api/v1/modsquad is for the new girder plugin.  The 
+// alternative (with now path prefexi) is for the previous tangelo back-end.
+// Select the prefix needed according to the back end in use. 
+
+export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
+//export const ajaxPrefix= 'http://localhost:8080'
+
+export const fetchConfig = (config = ajaxPrefix+'/config') =>
   (dispatch) => {
     dispatch(requestConfig());
 
@@ -142,7 +149,7 @@ export const fetchConfig = (config = '/config') =>
 
       // now that we have the config information, look up the datasets
       dispatch(requestActiveData());
-      json('/dataset/data', (dat) => {
+      json(ajaxPrefix+'/dataset/data', (dat) => {
         dispatch(receiveActiveData(dat));
       })
         .on('error', err => dispatch(setErrorMessage(
@@ -150,7 +157,7 @@ export const fetchConfig = (config = '/config') =>
         )));
 
       dispatch(requestMetadata());
-      json('/dataset/metadata', (metadat) => {
+      json(ajaxPrefix+'/dataset/metadata', (metadat) => {
         dispatch(receiveMetadata(metadat));
       })
         .on('error', err => dispatch(setErrorMessage(
@@ -158,7 +165,7 @@ export const fetchConfig = (config = '/config') =>
         )));
 
       dispatch(requestProblems());
-      json('/dataset/problems', (contents) => {
+      json(ajaxPrefix+'/dataset/problems', (contents) => {
         dispatch(setExploratoryYVar(contents[0].targets[0].colName));
         dispatch(receiveProblems(contents));
       });
@@ -209,7 +216,7 @@ export const runTA2 = (port, dispatch, state) => {
       Object.entries(params).forEach(d => query.push(`${d[0]}=${d[1]}`));
 
       // perform pipeline call to TA2
-      const url = `/pipeline?${query.join('&')}`;
+      const url = ajaxPrefix+`/pipeline?${query.join('&')}`;
       // console.log('url: ', url);
 
       dispatch(requestPipelines());
@@ -254,7 +261,7 @@ export const getPipelinePredictions = (state, dispatch) => {
     const query = [];
     Object.entries(params).forEach(a => query.push(`${a[0]}=${a[1]}`));
 
-    const url = `/pipeline/execute?${query.join('&')}`;
+    const url = ajaxPrefix+`/pipeline/execute?${query.join('&')}`;
 
     dispatch(requestExecutedPipelines());
 
@@ -269,7 +276,7 @@ export const getPipelinePredictions = (state, dispatch) => {
         const { csvUri } = pipeline.exposedOutputs['outputs.0'];
 
         // read the CSV data into an object and store it in redux
-        const csvData = `pipeline/results?resultURI=${csvUri}`;
+        const csvData = ajaxPrefix+`/pipeline/results?resultURI=${csvUri}`;
         csv(csvData, (predictedData) => {
           // console.log(predictedData[0]);
           pipeline.solution_id = d.solutionId;
@@ -316,7 +323,7 @@ export const exportPipeline = (pipelineId, state) => {
   const query = [];
   Object.entries(params).forEach(d => query.push(`${d[0]}=${d[1]}`));
 
-  const url = `/pipeline/export?${query.join('&')}`;
+  const url = ajaxPrefix+`/pipeline/export?${query.join('&')}`;
 
   json(url).post({}, (resp) => {
     console.log('export pipeline response:');

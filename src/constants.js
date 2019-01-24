@@ -27,6 +27,8 @@ export const SET_EXPORTED_PIPELINES = 'SET_EXPORTED_PIPELINES';
 
 export const getSteps = () => ([
   'Welcome',
+  'GeoApp',
+  'Datasets',
   'Variables',
   'Exploratory Vis',
   'Model Discovery',
