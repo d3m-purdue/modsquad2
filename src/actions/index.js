@@ -11,6 +11,17 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES,
   REQUEST_EXTERNAL_DATASET_LIST, RECEIVE_EXTERNAL_DATASET_LIST } from '../constants';
 
+
+// The prefix values with api/v1/modsquad are for the new girder plugin.  The 
+// alternative (with no path prefex) is for the previous tangelo back-end.
+// Select the prefix needed according to the back end in use or change his URL for connection
+// with a different back-end server 
+
+export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
+//export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
+//export const ajaxPrefix= 'http://localhost:8080'
+
+
 export const setActiveStep = val => ({
   type: SET_ACTIVE_STEP,
   val
@@ -145,13 +156,6 @@ export const receiveExternalDatasetList = dat => ({
   receivedAt: Date.now()
 });
 
-
-// The prefix values with api/v1/modsquad are for the new girder plugin.  The 
-// alternative (with now path prefexi) is for the previous tangelo back-end.
-// Select the prefix needed according to the back end in use. 
-
-export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
-//export const ajaxPrefix= 'http://localhost:8080'
 
 
 export const fetchConfig = (config = ajaxPrefix+'/config') =>
