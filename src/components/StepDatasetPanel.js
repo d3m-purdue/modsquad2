@@ -19,18 +19,13 @@ const styles = {
   }
 };
 
-const StepGeoApp = ({ classes }) => (
+const StepDatasetPanel = ({ classes }) => (
   <div>
-    <Typography variant="headline" className={classes.title}>
-       Geospatial dataset interface
-    </Typography>
     <Typography className={classes.p}>
-    Explore and extract geospatial, temporal datasets through interactive
-   filtering.  
+    Browse, review, and upload additional datasets here, if needed, for later analysis
     </Typography>
 
-
-    <Iframe url="https://purdue-geoapp.datadrivendiscovery.org"
+    <Iframe url="https://purdue-datasets.datadrivendiscovery.org"
         width="1100px"
         height="700px"
         id="myId"
@@ -42,8 +37,8 @@ const StepGeoApp = ({ classes }) => (
   </div>
 );
 
-StepGeoApp.propTypes = {
+StepDatasetPanel.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(StepGeoApp);
+export default withStyles(styles)(StepDatasetPanel);

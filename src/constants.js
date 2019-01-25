@@ -31,6 +31,7 @@ export const RECEIVE_EXTERNAL_DATASET_LIST = 'RECEIVE_EXTERNAL_DATASET_LIST'
 
 export const getSteps = () => ([
   'Welcome',
+  'Extra Data',
   'GeoApp',
   'Datasets',
   'Variables',
