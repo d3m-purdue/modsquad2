@@ -338,6 +338,6 @@ export const getExternalDatasetList = (externalDataList = ajaxPrefix+'/dataset/e
     dispatch(requestExternalDatasetList());
 
     json(externalDataList, (dlist) => {
-      dispatch(receiveExternalDatasetList(dlist.datasets));
+      dispatch(receiveExternalDatasetList(dlist.data));
     });
 };
