@@ -52,17 +52,17 @@ const getStepContent = (stepIndex) => {
       return (<StepDatasetPanel />)
     case 2:
       return (<StepGeoApp />)
+    //case 3:
+    //  return (<StepDatasets />)
     case 3:
-      return (<StepDatasets />)
-    case 4:
       return (<StepVariables />);
-    case 5:
+    case 4:
       return (<StepExploratory />);
-    case 6:
+    case 5:
       return (<StepModel />);
-    case 7:
+    case 6:
       return (<StepModelResults />);
-    case 8:
+    case 7:
       return (<StepQuit />);
 
     default:

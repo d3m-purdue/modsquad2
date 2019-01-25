@@ -33,7 +33,6 @@ export const getSteps = () => ([
   'Welcome',
   'Extra Data',
   'GeoApp',
-  'Datasets',
   'Variables',
   'Exploratory Vis',
   'Model Discovery',
