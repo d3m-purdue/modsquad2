@@ -197,7 +197,7 @@ export const externalData = (state = {
         isFetching: false,
         didInvalidate: false,
         isLoaded: true,
-        config: action.config,
+        data: action.data,
         lastUpdated: action.receivedAt
       });
     default:
