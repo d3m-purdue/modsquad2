@@ -18,16 +18,16 @@ const styles = {
 
 const columnData = [
   {
-    id: 'PIPELINE',
+    id: 'DATASET',
     numeric: false,
     disablePadding: true,
-    label: 'DATASET NAME'
+    label: 'Dataset ID'
   },
   {
-    id: 'SIZE',
+    id: 'NAME',
     numeric: true,
     disablePadding: false,
-    label: 'SIZE'
+    label: 'DATASET NAME'
   },
   {
     id: 'AUGMENT',

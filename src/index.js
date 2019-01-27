@@ -68,7 +68,7 @@ if (module.hot) {
 }
 
 // fill the dataset table for any datasets already there.  
-// TODO: We want to do this right as we enter the dataset panel, instead of automatically in the beginning. This 
+// TODO: We want to reload this right as we enter the dataset panel, instead of once in the beginning. This 
 // is just a way to force the event.
 store.dispatch(getExternalDatasetList());
 

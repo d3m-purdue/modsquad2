@@ -15,7 +15,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 import DatasetTableToolbar from './DatasetTableToolbar';
 import DatasetTableHead from './DatasetTableHead';
-import { setSelectedPipelines, exportPipeline, setExportedPipelines } from '../actions';
+import { setsetExternalData, augmentDataset } from '../actions';
 
 const styles = theme => ({
   root: {
@@ -68,16 +68,16 @@ class DatasetTable extends React.Component {
         );
       }
 
+      // declare the record columns here for the dataset. Needs to match DataTableHead declarations
       return ({
         id: i,
-        PIPELINE: d.solutionId,
-        ROC_AUC: d.internalScore,
-        RANK: (<span className={props.classes.tableGraph}  />),
-        EXPORT: btn
+        DATASET: d.assetstoreId,
+        NAME: d.name,
+        AUGMENT: btn
       });
     });
 
-    //tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
+    // the state stored by the datatable.  
 
     this.state = {
       order: 'desc',
@@ -88,22 +88,7 @@ class DatasetTable extends React.Component {
     };
   }
 
-  handleRequestSort = (event, property) => {
-    const orderBy = property;
-    let order = 'desc';
-
-    if (this.state.orderBy === property && this.state.order === 'desc') {
-      order = 'asc';
-    }
-
-    const data =
-      order === 'desc'
-        ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
-
-    this.setState({ data, order, orderBy });
-  };
-
+  
   handleSelectAllClick = (event, checked) => {
     if (checked) {
       this.props.handleChange(this.state.data.map(n => n.NAME));
@@ -135,7 +120,7 @@ class DatasetTable extends React.Component {
 
   /*
   handleDataMart = (assetstoreId) => {
-    this.props.handleDataMart(assetstoreId, this.props.externalData, this.props.state)
+    this.props.handleDataMart(assetstoreId, this.props.data)
     const newTableDat = Object.assign([], this.state.datasets);
     const sids = newTableDat.map(d => d.DATASET);
   }
@@ -189,8 +174,8 @@ class DatasetTable extends React.Component {
                       />
                     </TableCell>
                     <TableCell padding="none">{n.DATASET}</TableCell>
-                    <TableCell numeric>{n.SIZE}</TableCell>
-                    <TableCell>{n.EXPORT}</TableCell>
+                    <TableCell >{n.NAME}</TableCell>
+                    <TableCell>{n.AUGMENT}</TableCell>
                   </TableRow>
                 );
               })}
@@ -227,10 +212,8 @@ class DatasetTable extends React.Component {
 
 DatasetTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  externalData: PropTypes.array.isRequired,
-  state: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleExport: PropTypes.func.isRequired,
+  handleAugment: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired
 };
 
@@ -245,7 +228,7 @@ const mapDispatchToProps = dispatch => ({
     // console.log(val);
     //dispatch(setSelectedExternalData(val));
   },
-  handleExport: (dataId, externalData, state) => {
+  handleAugment: (dataId, externalData, state) => {
     //selectExternalData(dataId, state);
     const eds = Object.assign([], externalData);
     eds.push(dataId);

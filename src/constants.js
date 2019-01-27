@@ -25,7 +25,7 @@ export const SET_PIPELINE_PROGRESS = 'SET_PIPELINE_PROGRESS';
 export const SET_TA2_TIMEOUT = 'SET_TA2_TIMEOUT';
 export const SET_EXPORTED_PIPELINES = 'SET_EXPORTED_PIPELINES';
 
-// edded for external data import, an alternative data source to the D3M problem declarations
+// actions added for external data import, an alternative data source to the D3M problem declarations
 export const REQUEST_EXTERNAL_DATASET_LIST = 'REQUEST_EXTERNAL_DATASET_LIST'
 export const RECEIVE_EXTERNAL_DATASET_LIST = 'RECEIVE_EXTERNAL_DATASET_LIST'
 
