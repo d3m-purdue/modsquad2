@@ -24,7 +24,7 @@ const styles = theme => ({
   },
   stepper: {
     width: '100%',
-    maxWidth: 1000,
+    maxWidth: 1600,
     margin: 'auto'
   },
   body: {
@@ -52,17 +52,17 @@ const getStepContent = (stepIndex) => {
       return (<StepDatasetPanel />)
     case 2:
       return (<StepGeoApp />)
-    //case 3:
-    //  return (<StepDatasets />)
     case 3:
-      return (<StepVariables />);
+      return (<StepDatasets />)
     case 4:
-      return (<StepExploratory />);
+      return (<StepVariables />);
     case 5:
-      return (<StepModel />);
+      return (<StepExploratory />);
     case 6:
-      return (<StepModelResults />);
+      return (<StepModel />);
     case 7:
+      return (<StepModelResults />);
+    case 8:
       return (<StepQuit />);
 
     default:

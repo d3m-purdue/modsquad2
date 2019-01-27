@@ -6,7 +6,7 @@ import {
 } from './app';
 import {
   config, activeData, dataSchema, metadata, problems, pipelines,
-  executedPipelines
+  executedPipelines, externalData
 } from './data';
 
 const app = combineReducers({
@@ -28,7 +28,8 @@ const app = combineReducers({
   metadata,
   problems,
   pipelines,
-  inactiveVariables
+  inactiveVariables,
+  externalData
 });
 
 export default app;

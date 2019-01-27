@@ -24,17 +24,17 @@ const columnData = [
     label: 'DATASET NAME'
   },
   {
-    id: 'COLUMNS',
+    id: 'SIZE',
     numeric: true,
     disablePadding: false,
-    label: 'COLUMNS'
+    label: 'SIZE'
   },
   {
-    id: 'ROWS',
+    id: 'AUGMENT',
     numeric: true,
     disablePadding: false,
-    label: 'ROWS'
-  }
+    label: 'AUGMENT'
+  },
 ];
 
 class DatasetTableHead extends React.Component {

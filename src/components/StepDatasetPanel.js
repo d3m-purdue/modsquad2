@@ -22,12 +22,12 @@ const styles = {
 const StepDatasetPanel = ({ classes }) => (
   <div>
     <Typography className={classes.p}>
-    Browse, review, and upload additional datasets here, if needed, for later analysis
+    If needed, Browse, review, and upload additional datasets for later analysis
     </Typography>
 
     <Iframe url="https://purdue-datasets.datadrivendiscovery.org"
         width="1100px"
-        height="700px"
+        height="800px"
         id="myId"
         className="GeoApp"
         display="initial"

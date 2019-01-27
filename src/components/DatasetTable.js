@@ -39,21 +39,18 @@ class DatasetTable extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    const dat = props.data;
 
-  var datasets = [{'name':'datasetone.csv'},{'name':'ds2.csv'}]
-
-    const tableDat = datasets.map((d, i) => {
+    const tableDat = this.props.data.map((d, i) => {
       const val = d.name;
   
 
       let btn = '';
-      console.log(d.solutionId);
-      const expIdx = this.props.exportedPipelines.indexOf(d.solutionId);
+      console.log(d.assetstoreId);
+      const expIdx = this.props.data.indexOf(d.assetstoreId);
       if (expIdx > -1) {
         btn = (
           <span>
-            Exported
+            Augmented
             <br />
             (rank {expIdx + 1})
           </span>
@@ -64,9 +61,9 @@ class DatasetTable extends React.Component {
             size="small"
             color="primary"
             variant="raised"
-            onClick={() => this.handleExport(d.solutionId)}
+            onClick={() => this.handleDataMart(d.assetstoreId)}
           >
-            Export
+            Augment with DataMart
           </Button>
         );
       }
@@ -80,7 +77,7 @@ class DatasetTable extends React.Component {
       });
     });
 
-    tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
+    //tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
 
     this.state = {
       order: 'desc',
@@ -115,13 +112,13 @@ class DatasetTable extends React.Component {
     this.props.handleChange([]);
   };
 
-  handleClick = (event, pipelineId) => {
-    const selected = this.props.selectedPipelines;
-    const selectedIndex = selected.indexOf(pipelineId);
+  handleClick = (event, assetstoreId) => {
+    const selected = this.props.selectedDatasets;
+    const selectedIndex = selected.indexOf(assetstoreId);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, pipelineId);
+      newSelected = newSelected.concat(selected, assetstoreId);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -136,23 +133,13 @@ class DatasetTable extends React.Component {
     this.props.handleChange(newSelected);
   };
 
-  handleExport = (solutionId) => {
-    this.props.handleExport(solutionId, this.props.exportedPipelines, this.props.state)
-    const newTableDat = Object.assign([], this.state.data);
-    const sids = newTableDat.map(d => d.PIPELINE);
-    const idx = sids.indexOf(solutionId)
-    if (idx > -1) {
-      newTableDat[idx].EXPORT = (
-        <span>
-          Exported
-          <br />
-          (rank {this.props.exportedPipelines.length + 1})
-        </span>
-      );
-      this.setState({ data: newTableDat });
-    }
+  /*
+  handleDataMart = (assetstoreId) => {
+    this.props.handleDataMart(assetstoreId, this.props.externalData, this.props.state)
+    const newTableDat = Object.assign([], this.state.datasets);
+    const sids = newTableDat.map(d => d.DATASET);
   }
-
+*/
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -161,7 +148,7 @@ class DatasetTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value })
   );
 
-  isSelected = pid => this.props.selectedPipelines.indexOf(pid) !== -1;
+  isSelected = pid => this.props.data.indexOf(pid) !== -1;
 
   render() {
     const { classes } = this.props;
@@ -172,11 +159,11 @@ class DatasetTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <DatasetTableToolbar numSelected={this.props.selectedPipelines.length} />
+        <DatasetTableToolbar numSelected={this.props.data.length} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <DatasetTableHead
-              numSelected={this.props.selectedPipelines.length}
+              numSelected={this.props.data.length}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
@@ -198,12 +185,11 @@ class DatasetTable extends React.Component {
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isSelected}
-                        onClick={event => this.handleClick(event, n.PIPELINE)}
+                        onClick={event => this.handleClick(event, n.DATASET)}
                       />
                     </TableCell>
-                    <TableCell padding="none">{n.PIPELINE}</TableCell>
-                    <TableCell numeric>{n.ROC_AUC}</TableCell>
-                    <TableCell>{n.RANK}</TableCell>
+                    <TableCell padding="none">{n.DATASET}</TableCell>
+                    <TableCell numeric>{n.SIZE}</TableCell>
                     <TableCell>{n.EXPORT}</TableCell>
                   </TableRow>
                 );
@@ -241,8 +227,7 @@ class DatasetTable extends React.Component {
 
 DatasetTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  selectedPipelines: PropTypes.array.isRequired,
-  exportedPipelines: PropTypes.array.isRequired,
+  externalData: PropTypes.array.isRequired,
   state: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleExport: PropTypes.func.isRequired,
@@ -251,22 +236,20 @@ DatasetTable.propTypes = {
 
 const mapStateToProps = state => (
   {
-    selectedPipelines: state.selectedPipelines,
-    exportedPipelines: state.exportedPipelines,
-    state
+    data: state.externalData.data
   }
 );
 
 const mapDispatchToProps = dispatch => ({
   handleChange: (val) => {
     // console.log(val);
-    dispatch(setSelectedPipelines(val));
+    //dispatch(setSelectedExternalData(val));
   },
-  handleExport: (pipelineId, exportedPipelines, state) => {
-    exportPipeline(pipelineId, state);
-    const eps = Object.assign([], exportedPipelines);
-    eps.push(pipelineId);
-    dispatch(setExportedPipelines(eps));
+  handleExport: (dataId, externalData, state) => {
+    //selectExternalData(dataId, state);
+    const eds = Object.assign([], externalData);
+    eds.push(dataId);
+    //dispatch(setExternalData(eds));
   }
 });
 
