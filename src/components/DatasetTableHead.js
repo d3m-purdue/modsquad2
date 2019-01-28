@@ -25,7 +25,7 @@ const columnData = [
   },
   {
     id: 'NAME',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'DATASET NAME'
   },
@@ -44,18 +44,18 @@ class DatasetTableHead extends React.Component {
 
   render() {
     const {
-      onSelectAllClick, order, orderBy, numSelected, rowCount
+      order, orderBy
     } = this.props;
 
     return (
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
-            <Checkbox
+            {/* <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
-            />
+            /> */}
           </TableCell>
           {columnData.map(column => (
             <TableCell
@@ -88,12 +88,12 @@ class DatasetTableHead extends React.Component {
 
 DatasetTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  // numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  // onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  // rowCount: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(DatasetTableHead);

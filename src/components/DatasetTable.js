@@ -39,15 +39,16 @@ class DatasetTable extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    const { data } = this.props;
 
-    const tableDat = this.props.data.map((d, i) => {
+    const tableDat = data.map((d, i) => {
       const val = d.name;
   
 
       let btn = '';
       console.log(d.assetstoreId);
       // TODO: this not doing what we want... keep track of state if it has been run, just like export
-      const expIdx = this.props.data.indexOf(d.assetstoreId);
+      const expIdx = data.indexOf(d.assetstoreId);
       if (expIdx > -1) {
         btn = (
           <span>
@@ -72,7 +73,7 @@ class DatasetTable extends React.Component {
       // declare the record columns here for the dataset. Needs to match DataTableHead declarations
       return ({
         id: i,
-        DATASET: d.assetstoreId,
+        DATASET: d._id,
         NAME: d.name,
         AUGMENT: btn
       });
@@ -81,40 +82,45 @@ class DatasetTable extends React.Component {
     // the state stored by the datatable.  
 
     this.state = {
+      order: 'desc',
+      orderBy: 'NAME',
       data: tableDat,
       page: 0,
       rowsPerPage: 5
     };
   }
 
-  
-  handleSelectAllClick = (event, checked) => {
-    if (checked) {
-      this.props.handleChange(this.state.data.map(n => n.NAME));
-      return;
+  handleRequestSort = (event, property) => {
+    const orderBy = property;
+    let order = 'desc';
+
+    if (this.state.orderBy === property && this.state.order === 'desc') {
+      order = 'asc';
     }
-    this.props.handleChange([]);
+
+    const data =
+      order === 'desc'
+        ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
+        : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+
+    this.setState({ data, order, orderBy });
   };
 
-  handleClick = (event, assetstoreId) => {
-    const selected = this.props.selectedExternalDatasets;
-    const selectedIndex = selected.indexOf(assetstoreId);
-    let newSelected = [];
+  // handleSelectAllClick = (event, checked) => {
+  //   if (checked) {
+  //     this.props.handleChange(this.state.data.map(n => n.NAME));
+  //     return;
+  //   }
+  //   this.props.handleChange([]);
+  // };
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, assetstoreId);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+  handleClick = (event, _id) => {
+    const { handleChange, selectedExternalDatasets } = this.props;
+    if (selectedExternalDatasets.indexOf(_id) > -1) {
+      handleChange([]);
+    } else {
+      handleChange([_id]);
     }
-
-    this.props.handleChange(newSelected);
   };
 
   /*
@@ -135,27 +141,29 @@ class DatasetTable extends React.Component {
   isSelected = pid => this.props.data.indexOf(pid) !== -1;
 
   render() {
-    const { classes } = this.props;
+    const { classes, selectedExternalDatasets } = this.props;
     const {
       data, order, orderBy, rowsPerPage, page
     } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - (page * rowsPerPage));
+    // const ids = data.map(d => d._id);
 
     return (
       <Paper className={classes.root}>
-        <DatasetTableToolbar numSelected={this.props.data.length} />
+        <DatasetTableToolbar numSelected={selectedExternalDatasets.length || 0} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <DatasetTableHead
-              numSelected={this.props.data.length}
+              // numSelected={this.props.data.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              rowCount={data.length}
+              // onSelectAllClick={this.handleSelectAllClick}
+              onRequestSort={this.handleRequestSort}
+              // rowCount={data.length}
             />
             <TableBody>
               {data.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).map((n) => {
-                const isSelected = this.isSelected(n.PIPELINE);
+                const isSelected = selectedExternalDatasets.indexOf(n.DATASET) > -1;
                 return (
                   <TableRow
                     hover
@@ -171,9 +179,15 @@ class DatasetTable extends React.Component {
                         onClick={event => this.handleClick(event, n.DATASET)}
                       />
                     </TableCell>
-                    <TableCell padding="none">{n.DATASET}</TableCell>
-                    <TableCell >{n.NAME}</TableCell>
-                    <TableCell>{n.AUGMENT}</TableCell>
+                    <TableCell padding="none">
+                      {n.DATASET}
+                    </TableCell>
+                    <TableCell>
+                      {n.NAME}
+                    </TableCell>
+                    <TableCell>
+                      {n.AUGMENT}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -211,9 +225,9 @@ class DatasetTable extends React.Component {
 DatasetTable.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleAugment: PropTypes.func.isRequired,
+  // handleAugment: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
-  selectExternalData: PropTypes.object.isRequired
+  selectedExternalDatasets: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => (
@@ -225,16 +239,14 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => ({
   handleChange: (val) => {
-    console.log(val);
     dispatch(setSelectedExternalDatasets(val));
-  },
-
-  handleAugment: (dataId, externalData, state) => {
-    //selectExternalData(dataId, state);
-    const eds = Object.assign([], externalData);
-    eds.push(dataId);
-    //dispatch(setExternalData(eds));
   }
+  // handleAugment: (dataId, externalData, state) => {
+  //   //selectExternalData(dataId, state);
+  //   const eds = Object.assign([], externalData);
+  //   eds.push(dataId);
+  //   //dispatch(setExternalData(eds));
+  // }
 });
 
 export default connect(

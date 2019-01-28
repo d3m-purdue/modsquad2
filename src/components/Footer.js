@@ -71,6 +71,7 @@ Footer.propTypes = {
 const mapStateToProps = state => ({
   activeStep: state.activeStep,
   selectedPipelines: state.selectedPipelines,
+  selectedExternalDatasets: state.selectedExternalDatasets,
   state
 });
 
@@ -84,6 +85,9 @@ const mapDispatchToProps = dispatch => ({
       });
       dispatch(setActiveStep(0));
     } else if (val === 4) {
+      // LOAD DATA HERE... - the selected dataset will be availablei in state.selectedExternalDatasets
+      dispatch(setActiveStep(val));
+    } else if (val === 7) {
       // kick off reading in pipeline results
       getPipelinePredictions(state, dispatch);
       dispatch(setActiveStep(val));

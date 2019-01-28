@@ -41,11 +41,7 @@ const ModelTableToolbar = (props) => {
       })}
     >
       <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography variant="subheading">{numSelected} selected</Typography>
-        ) : (
-          <Typography variant="title">Loaded Datasets</Typography>
-        )}
+        <Typography variant="subheading">{numSelected} selected</Typography>
       </div>
     </Toolbar>
   );
