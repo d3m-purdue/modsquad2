@@ -28,6 +28,10 @@ export const SET_EXPORTED_PIPELINES = 'SET_EXPORTED_PIPELINES';
 // actions added for external data import, an alternative data source to the D3M problem declarations
 export const REQUEST_EXTERNAL_DATASET_LIST = 'REQUEST_EXTERNAL_DATASET_LIST'
 export const RECEIVE_EXTERNAL_DATASET_LIST = 'RECEIVE_EXTERNAL_DATASET_LIST'
+export const SET_SELECTED_EXTERNAL_DATASETS = 'SET_SELECTED_EXTERNAL_DATASETS'
+export const REQUEST_DATASET_JOIN = 'REQUEST_DATASET_JOIN'
+export const RECEIVE_DATASET_JOIN = 'RECEIVE_DATASET_JOIN'
+
 
 export const getSteps = () => ([
   'Welcome',

@@ -15,7 +15,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 import DatasetTableToolbar from './DatasetTableToolbar';
 import DatasetTableHead from './DatasetTableHead';
-import { setsetExternalData, augmentDataset } from '../actions';
+import { setSelectedExternalDatasets, augmentDataset } from '../actions';
 
 const styles = theme => ({
   root: {
@@ -46,6 +46,7 @@ class DatasetTable extends React.Component {
 
       let btn = '';
       console.log(d.assetstoreId);
+      // TODO: this not doing what we want... keep track of state if it has been run, just like export
       const expIdx = this.props.data.indexOf(d.assetstoreId);
       if (expIdx > -1) {
         btn = (
@@ -80,8 +81,6 @@ class DatasetTable extends React.Component {
     // the state stored by the datatable.  
 
     this.state = {
-      order: 'desc',
-      orderBy: 'ROC_AUC',
       data: tableDat,
       page: 0,
       rowsPerPage: 5
@@ -98,7 +97,7 @@ class DatasetTable extends React.Component {
   };
 
   handleClick = (event, assetstoreId) => {
-    const selected = this.props.selectedDatasets;
+    const selected = this.props.selectedExternalDatasets;
     const selectedIndex = selected.indexOf(assetstoreId);
     let newSelected = [];
 
@@ -152,7 +151,6 @@ class DatasetTable extends React.Component {
               order={order}
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
               rowCount={data.length}
             />
             <TableBody>
@@ -214,20 +212,23 @@ DatasetTable.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleAugment: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  selectExternalData: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => (
   {
-    data: state.externalData.data
+    data: state.externalData.data,
+    selectedExternalDatasets: state.selectedExternalDatasets
   }
 );
 
 const mapDispatchToProps = dispatch => ({
   handleChange: (val) => {
-    // console.log(val);
-    //dispatch(setSelectedExternalData(val));
+    console.log(val);
+    dispatch(setSelectedExternalDatasets(val));
   },
+
   handleAugment: (dataId, externalData, state) => {
     //selectExternalData(dataId, state);
     const eds = Object.assign([], externalData);

@@ -9,7 +9,8 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
   REQUEST_METADATA, RECEIVE_METADATA,
   REQUEST_PROBLEMS, RECEIVE_PROBLEMS,
   REQUEST_PIPELINES, RECEIVE_PIPELINES, CANCEL_PIPELINES,
-  REQUEST_EXTERNAL_DATASET_LIST, RECEIVE_EXTERNAL_DATASET_LIST } from '../constants';
+  REQUEST_EXTERNAL_DATASET_LIST, RECEIVE_EXTERNAL_DATASET_LIST,
+  SET_SELECTED_EXTERNAL_DATASETS, REQUEST_DATASET_JOIN, RECEIVE_DATASET_JOIN } from '../constants';
 
 
 // The prefix values with api/v1/modsquad are for the new girder plugin.  The 
@@ -144,7 +145,8 @@ export const setErrorMessage = msg => ({
   type: SET_ERROR_MESSAGE, msg
 });
 
-// added Jan 2019 for the external file operations
+
+// Jan 2019 - added additional actions for the external file operations
 
 export const requestExternalDatasetList = val => ({
   type: REQUEST_EXTERNAL_DATASET_LIST, val
@@ -155,6 +157,23 @@ export const receiveExternalDatasetList = dat => ({
   data: dat,
   receivedAt: Date.now()
 });
+
+export const setSelectedExternalDatasets = val => ({
+  type: SET_SELECTED_EXTERNAL_DATASETS, val
+});
+
+export const requestDatasetJoin = val => ({
+  type: REQUEST_DATASET_JOIN, val
+});
+
+export const receiveDatsetJoin = dat => ({
+  type: RECEIVE_DATASET_JOIN,
+  data: dat,
+  receivedAt: Date.now()
+});
+
+
+
 
 
 
@@ -331,13 +350,24 @@ export const exportPipeline = (pipelineId, state) => {
   });
 };
 
+// ** below added for external dataset integration
 
-// functions to dispatch the actions added for reading from external data list
+// function to dispatch the actions added for reading from external data list
 export const getExternalDatasetList = (externalDataList = ajaxPrefix+'/dataset/external_list') =>
   (dispatch) => {
     dispatch(requestExternalDatasetList());
 
     json(externalDataList, (dlist) => {
+      dispatch(receiveExternalDatasetList(dlist.data));
+    });
+};
+
+// function to dispatch the actions added for joining two datasets.  FileIDs and either "rows" or "columns"
+export const getDatasetJoin = (joinResult = ajaxPrefix+'/dataset/merge',joinSpec) =>
+  (dispatch) => {
+    dispatch(requestDatasetJoin(joinSpec));
+
+    json(joinResult, (dlist) => {
       dispatch(receiveExternalDatasetList(dlist.data));
     });
 };
