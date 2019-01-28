@@ -252,6 +252,21 @@ export const runTA2 = (port, dispatch, state) => {
     });
 };
 
+export const loadDataset = (state, dispatch) => {
+  if (state.selectedExternalDatasets.length > 0) {
+  //   dispatch(requestMetadata());
+  //   dispatch(requestActiveData());
+  //   dispatch(requestProblems());
+    
+  //   const externalDatasetQuery = ...;
+  //   json(externalDatasetQuery, (response) => {
+  //     dispatch(receiveActiveData(response.data));
+  //     dispatch(receiveMetadata(reponse.metadata));
+  //     dispatch(setExploratoryYVar(response.yvar));
+  //     dispatch(receiveProblems(response.problem));
+  //   });
+  }
+};
 
 export const getPipelinePredictions = (state, dispatch) => {
   const pipeResults = [];

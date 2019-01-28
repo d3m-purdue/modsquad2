@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import { json } from 'd3-request';
-import { setActiveStep, getPipelinePredictions } from '../actions';
+import { setActiveStep, getPipelinePredictions, loadDataset } from '../actions';
 import { getSteps } from '../constants';
 
 const styles = theme => ({
@@ -85,7 +85,8 @@ const mapDispatchToProps = dispatch => ({
       });
       dispatch(setActiveStep(0));
     } else if (val === 4) {
-      // LOAD DATA HERE... - the selected dataset will be availablei in state.selectedExternalDatasets
+      // LOAD DATA HERE... - the selected dataset will be available in state.selectedExternalDatasets
+      loadDataset(state, dispatch);
       dispatch(setActiveStep(val));
     } else if (val === 7) {
       // kick off reading in pipeline results
