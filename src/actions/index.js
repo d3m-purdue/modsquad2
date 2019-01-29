@@ -172,11 +172,6 @@ export const receiveDatsetJoin = dat => ({
   receivedAt: Date.now()
 });
 
-
-
-
-
-
 export const fetchConfig = (config = ajaxPrefix+'/config') =>
   (dispatch) => {
     dispatch(requestConfig());
@@ -236,12 +231,12 @@ export const runTA2 = (port, dispatch, state) => {
 
       // perform pipeline call to TA2
       const url = ajaxPrefix+`/pipeline?${query.join('&')}`;
-      // console.log('url: ', url);
+      console.log('url: ', url);
 
       dispatch(requestPipelines());
       json(url).post({}, (resp) => {
         // const respComplete = resp.filter(x => x.progressInfo === 'COMPLETED');
-        dispatch(receivePipelines(resp));
+        dispatch(receivePipelines(resp.splice(2, resp.length - 1))); // splice will remove first 2 pipelines
       })
         .on('error', () => {
           dispatch(setErrorMessage(
@@ -254,17 +249,21 @@ export const runTA2 = (port, dispatch, state) => {
 
 export const loadDataset = (state, dispatch) => {
   if (state.selectedExternalDatasets.length > 0) {
-  //   dispatch(requestMetadata());
-  //   dispatch(requestActiveData());
-  //   dispatch(requestProblems());
-    
-  //   const externalDatasetQuery = ...;
-  //   json(externalDatasetQuery, (response) => {
-  //     dispatch(receiveActiveData(response.data));
-  //     dispatch(receiveMetadata(reponse.metadata));
-  //     dispatch(setExploratoryYVar(response.yvar));
-  //     dispatch(receiveProblems(response.problem));
-  //   });
+    dispatch(receiveActiveData([]));
+    dispatch(requestActiveData());
+
+    dispatch(receiveMetadata([]));
+    dispatch(requestMetadata());
+    dispatch(requestProblems());
+
+    const query = `http://54.85.103.8:8080/api/v1/modsquad/dataset/external_download?fileId=${state.selectedExternalDatasets[0]}`;
+
+    json(query, (response) => {
+      dispatch(receiveActiveData(response.data));
+      dispatch(receiveMetadata(response.metadata));
+      dispatch(setExploratoryYVar(response.yvar));
+      dispatch(receiveProblems(response.problem));
+    });
   }
 };
 
