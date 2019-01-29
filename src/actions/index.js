@@ -213,14 +213,17 @@ export const runTA2 = (port, dispatch, state) => {
     .post({}, (session) => {
       const dataURI = state.config.config.dataset_schema;
       // const targetFeatures = state.problems.data[0].targets;
-      
+
+      // http://54.85.103.8:8080/api/v1/modsquad/pipeline?data_uri=/input/185_baseball/TRAIN/dataset_TRAIN/datasetDoc.json&time_limit=1&inactive=
 
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
         // context,
         data_uri: dataURI,
         time_limit: (state.ta2timeout/60),
-        inactive: state.inactiveVariables
+        inactive: state.inactiveVariables,
+        target: state.exploreYVar,
+        dynamic_mode: state.config.config.dynamicMode === true
         // task_type: taskType,
         // max_pipelines: maxPipelines
       };
@@ -263,6 +266,7 @@ export const loadDataset = (state, dispatch) => {
       dispatch(receiveMetadata(response.metadata));
       dispatch(setExploratoryYVar(response.yvar));
       dispatch(receiveProblems(response.problem));
+      dispatch(receiveConfig(Object.assign({}, { dynamicMode: true }, state.config.config)));
     });
   }
 };
