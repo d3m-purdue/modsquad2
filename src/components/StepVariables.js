@@ -25,7 +25,7 @@ const styles = theme => ({
     position: 'absolute',
     top: 0,
     bottom: 0,
-    maxWidth: 1000,
+    maxWidth: 1100,
     overflow: 'hidden'
   },
   panelHead: {

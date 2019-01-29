@@ -32,7 +32,8 @@ const StepDatasetPanel = ({ classes }) => (
         className="GeoApp"
         display="initial"
         position="relative"
-        allowFullScreen/>
+        allowFullScreen
+    />
 
   </div>
 );

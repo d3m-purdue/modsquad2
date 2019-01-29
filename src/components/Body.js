@@ -39,7 +39,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     width: '100%',
-    maxWidth: 950,
+    maxWidth: 1100,
     margin: 'auto'
   }
 });

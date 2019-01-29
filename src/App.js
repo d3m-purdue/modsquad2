@@ -12,7 +12,7 @@ const styles = {
     paddingBottom: 20
   },
   bodyWrap: {
-    maxWidth: 1000,
+    maxWidth: 1100,
     paddingLeft: 20,
     paddingRight: 20,
     margin: 'auto'
