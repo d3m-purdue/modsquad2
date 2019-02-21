@@ -27,7 +27,7 @@ const StepDatasetPanel = ({ classes }) => (
 
     <Iframe url="https://purdue-datasets.datadrivendiscovery.org"
         width="1100px"
-        height="800px"
+        height="900px"
         id="myId"
         className="GeoApp"
         display="initial"

@@ -35,11 +35,11 @@ export const RECEIVE_DATASET_JOIN = 'RECEIVE_DATASET_JOIN'
 
 export const getSteps = () => ([
   'Welcome',
-  'Extra Data',
-  'GeoApp',
-  'Datasets',
-  'Variables',
-  'Exploratory Vis',
+  'Curate Wild Data',
+  'Geo Subsetting',
+  'Select for Modeling',
+  'Feature Vis',
+  'Relations in the Data',
   'Model Discovery',
   'Model Results Vis',
   'Quit'

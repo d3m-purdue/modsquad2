@@ -18,10 +18,10 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
 // Select the prefix needed according to the back end in use or change his URL for connection
 // with a different back-end server 
 
-export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
-//export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
+//export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
+export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
 //export const ajaxPrefix= 'http://localhost:8080'
-
+//export const ajaxPrefix= 'http://10.108.4.60:8080/api/v1/modsquad'
 
 export const setActiveStep = val => ({
   type: SET_ACTIVE_STEP,
@@ -259,14 +259,16 @@ export const loadDataset = (state, dispatch) => {
     dispatch(requestMetadata());
     dispatch(requestProblems());
 
-    const query = `http://54.85.103.8:8080/api/v1/modsquad/dataset/external_download?fileId=${state.selectedExternalDatasets[0]}`;
+    const query =  ajaxPrefix+`/dataset/external_download?fileId=${state.selectedExternalDatasets[0]}`;
 
     json(query, (response) => {
       dispatch(receiveActiveData(response.data));
       dispatch(receiveMetadata(response.metadata));
       dispatch(setExploratoryYVar(response.yvar));
       dispatch(receiveProblems(response.problem));
-      dispatch(receiveConfig(Object.assign({}, { dynamicMode: true }, state.config.config)));
+      //dispatch(receiveConfig(Object.assign({}, { dynamicMode: true }, state.config.config)));
+      dispatch(setDataSchema(response.config.dataset_schema));
+      dispatch(receiveConfig(response.config));
     });
   }
 };
@@ -314,7 +316,7 @@ export const getPipelinePredictions = (state, dispatch) => {
 
         // read the CSV data into an object and store it in redux
         const csvData = ajaxPrefix+`/pipeline/results?resultURI=${csvUri}`;
-        csv(csvData, (predictedData) => {
+        json(csvData, (predictedData) => {
           // console.log(predictedData[0]);
           pipeline.solution_id = d.solutionId;
           pipeline.fitted_solution_id = respComplete.fitted_solution_id[0];
