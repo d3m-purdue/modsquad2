@@ -18,8 +18,8 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
 // Select the prefix needed according to the back end in use or change his URL for connection
 // with a different back-end server 
 
-//export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
-export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
+export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
+//export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
 //export const ajaxPrefix= 'http://localhost:8080'
 //export const ajaxPrefix= 'http://10.108.4.60:8080/api/v1/modsquad'
 
@@ -216,6 +216,10 @@ export const runTA2 = (port, dispatch, state) => {
 
       // http://54.85.103.8:8080/api/v1/modsquad/pipeline?data_uri=/input/185_baseball/TRAIN/dataset_TRAIN/datasetDoc.json&time_limit=1&inactive=
 
+
+      // generate a flag indicating if we are in dynamic dataset mode
+      const dynamic_mode_flag = (state.config.config.dynamicMode === true) ? "True" : "False"
+      
       // Gather the parameters needed for a CreatePipelines call.
       const params = {
         // context,
@@ -223,7 +227,7 @@ export const runTA2 = (port, dispatch, state) => {
         time_limit: (state.ta2timeout/60),
         inactive: state.inactiveVariables,
         target: state.exploreYVar,
-        dynamic_mode: state.config.config.dynamicMode === true
+        dynamic_mode: dynamic_mode_flag
         // task_type: taskType,
         // max_pipelines: maxPipelines
       };

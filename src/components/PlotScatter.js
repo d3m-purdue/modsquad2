@@ -97,6 +97,7 @@ const Scatter = ({
     "axes": [
       {
         "orient": "bottom", "scale": "xscale", "offset": 5, "format": "s",
+        "labelAngle": 15,
         "title": {"signal": "xField"}
       },
       {

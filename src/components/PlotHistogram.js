@@ -100,8 +100,9 @@ const Histogram = ({
     ],
 
     "axes": [
-      {"orient": "bottom", "scale": "xscale", "tickCount": 10,"labelOverlap":true},
-      {"orient": "bottom", "scale": "xscale-null"},
+      {"orient": "bottom", "scale": "xscale", "tickCount": 10,"labelAngle": 15,"labelOverlap":true},
+      // CRL I don't know what the line below is supposed to do.  It renders "null" in the histogram
+      //{"orient": "bottom", "scale": "xscale-null"},
       {"orient": "left", "scale": "yscale", "tickCount": 5, "offset": 5}
     ],
 

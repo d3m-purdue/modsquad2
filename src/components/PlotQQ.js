@@ -72,6 +72,7 @@ const QQ = ({
         "grid": true,
         "domain": false,
         "orient": "bottom",
+        "labelAngle": 15,
         "tickCount": 5,
         "title": "Order"
       },
