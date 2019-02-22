@@ -11,7 +11,7 @@ import lightBlue from 'material-ui/colors/lightBlue';
 import './index.css';
 import App from './App';
 import app from './reducers';
-import { fetchConfig } from './actions';
+import { fetchConfig, getExternalDatasetList } from './actions';
 import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(
@@ -67,8 +67,12 @@ if (module.hot) {
   })
 }
 
-store.dispatch(fetchConfig());
+// fill the dataset table for any datasets already there.  
+// TODO: We want to reload this right as we enter the dataset panel, instead of once in the beginning. This 
+// is just a way to force the event.
+store.dispatch(getExternalDatasetList());
 
-// this.props.store.dispatch(fetchDisplayList(this.props.config, this.props.id));
+// initialize with a dataset from the D3M problem statement
+store.dispatch(fetchConfig());
 
 registerServiceWorker();

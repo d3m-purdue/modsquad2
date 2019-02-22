@@ -5,6 +5,9 @@ import { withStyles } from 'material-ui/styles';
 import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 
 import StepWelcome from './StepWelcome';
+import StepDatasetPanel from './StepDatasetPanel';
+import StepGeoApp from './StepGeoApp';
+import StepDatasets from './StepDatasets';
 import StepVariables from './StepVariables';
 import StepExploratory from './StepExploratory';
 import StepModel from './StepModel';
@@ -21,7 +24,7 @@ const styles = theme => ({
   },
   stepper: {
     width: '100%',
-    maxWidth: 1000,
+    maxWidth: 1600,
     margin: 'auto'
   },
   body: {
@@ -36,7 +39,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     width: '100%',
-    maxWidth: 950,
+    maxWidth: 1100,
     margin: 'auto'
   }
 });
@@ -46,14 +49,20 @@ const getStepContent = (stepIndex) => {
     case 0:
       return (<StepWelcome />);
     case 1:
-      return (<StepVariables />);
+      return (<StepDatasetPanel />)
     case 2:
-      return (<StepExploratory />);
+      return (<StepGeoApp />)
     case 3:
-      return (<StepModel />);
+      return (<StepDatasets />)
     case 4:
-      return (<StepModelResults />);
+      return (<StepVariables />);
     case 5:
+      return (<StepExploratory />);
+    case 6:
+      return (<StepModel />);
+    case 7:
+      return (<StepModelResults />);
+    case 8:
       return (<StepQuit />);
 
     default:

@@ -86,7 +86,7 @@ class ModelTable extends React.Component {
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: btn
       });
-    });
+    });  // end of tableDat definition
 
     tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
 
@@ -97,7 +97,7 @@ class ModelTable extends React.Component {
       page: 0,
       rowsPerPage: 5
     };
-  }
+  }  // end of ModelTable constructor
 
   handleRequestSort = (event, property) => {
     const orderBy = property;

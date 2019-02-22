@@ -2,7 +2,7 @@ import {
   SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_SELECTED_PIPELINES,
   SET_VARIABLE_VAR, SET_EXPLORE_Y_VAR, SET_TA2_PORT, SET_TA2_TIMEOUT,
   SET_TA2_SESSION, SET_ACTIVE_RESULT_ID, SET_INACTIVE_VARIABLES,
-  SET_PIPELINE_PROGRESS, SET_EXPORTED_PIPELINES
+  SET_PIPELINE_PROGRESS, SET_EXPORTED_PIPELINES, SET_SELECTED_EXTERNAL_DATASETS
 } from '../constants';
 
 export const errorMsg = (state = '', action) => {
@@ -107,6 +107,16 @@ export const inactiveVariables = (state = [], action) => {
 export const exportedPipelines = (state = [], action) => {
   switch (action.type) {
     case SET_EXPORTED_PIPELINES:
+      return Object.assign([], [], action.val);
+    default:
+  }
+  return state;
+};
+
+// added for external datasets
+export const selectedExternalDatasets = (state = [], action) => {
+  switch (action.type) {
+    case SET_SELECTED_EXTERNAL_DATASETS:
       return Object.assign([], [], action.val);
     default:
   }

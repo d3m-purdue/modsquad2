@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import {
   errorMsg, activeStep, variableVar, exploreYVar, ta2port, ta2timeout, ta2session,
   selectedPipelines, exportedPipelines, activeResultIndex, inactiveVariables,
-  pipelineProgress
+  pipelineProgress, selectedExternalDatasets
 } from './app';
 import {
   config, activeData, dataSchema, metadata, problems, pipelines,
-  executedPipelines
+  executedPipelines, externalData
 } from './data';
 
 const app = combineReducers({
@@ -28,7 +28,9 @@ const app = combineReducers({
   metadata,
   problems,
   pipelines,
-  inactiveVariables
+  inactiveVariables,
+  externalData,
+  selectedExternalDatasets
 });
 
 export default app;
