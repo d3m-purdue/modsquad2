@@ -18,9 +18,8 @@ import { SET_ERROR_MESSAGE, SET_ACTIVE_STEP, SET_TA2_SESSION,
 // Select the prefix needed according to the back end in use or change his URL for connection
 // with a different back-end server 
 
-export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
-//export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
-//export const ajaxPrefix= 'http://localhost:8080'
+//export const ajaxPrefix= 'http://54.85.103.8:8080/api/v1/modsquad'
+export const ajaxPrefix= 'http://localhost:8080/api/v1/modsquad'
 //export const ajaxPrefix= 'http://10.108.4.60:8080/api/v1/modsquad'
 
 export const setActiveStep = val => ({

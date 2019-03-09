@@ -16,12 +16,27 @@ import CatHeatmap from './PlotCatHeatmap';
 import { setActiveResultId } from '../actions';
 
 
+/*
 const determineProblemType = (metric) => {
   const classificationMetrics = ['accuracy', 'f1Macro', 'f1Micro', 'ROC_AUC', 'rocAuc', 'rocAucMicro', 'rocAucMacro'];
   if (classificationMetrics.indexOf(metric) > -1) {
     return 'classification';
   }
   return 'regression';
+};
+*/
+
+var toType = function(obj) {
+  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+}
+
+const determineProblemType = (targetValue) => {
+  console.log('determine problem target value: ',targetValue)
+  if (toType(targetValue) == "number") {
+    return   'regression';
+  }
+  return 'classification';
+  //return   'regression';
 };
 
 
@@ -70,7 +85,7 @@ const styles = theme => ({
 });
 
 const StepModelResults = ({
-  classes, data, pdata, meta, problems, selected, pipelines, selectedPipelines, handleChange,
+  classes, data, pdata, meta, problems, selected, pipelines, selectedPipelines, handleChange, exploreYVar
 }) => {
   if (pdata.isFetching === true) {
     return (
@@ -119,7 +134,13 @@ const StepModelResults = ({
     }
 
     dat = pdata.data[idx].data;
-    yvar = problems[0].targets[0].colName;
+
+    // we can't rely on this for the dynamic case.  the user could have selected a 
+    // different value in the variable, so pull from the store instead. exploreYVar as
+    // added to the mapStateToProps 
+    //yvar = problems[0].targets[0].colName;
+    yvar = exploreYVar
+
 
     const datLookup = {};
     if (dat) {
@@ -131,7 +152,8 @@ const StepModelResults = ({
     let plots = '';
     let helperText = '';
 
-    if (determineProblemType(problems[0].metrics[0].metric) === 'classification') {
+    //if (determineProblemType(problems[0].metrics[0].metric) === 
+    if (determineProblemType(dat[0][yvar]) === 'classification') {
       const uYVar = [];
       const newData = [];
       for (let i = 0; i < data.length; i += 1) {
@@ -183,7 +205,8 @@ const StepModelResults = ({
           normRows={false}
         />
       );
-    } else if (determineProblemType(problems[0].metrics[0].metric) === 'regression') {
+      //else if (determineProblemType(problems[0].metrics[0].metric) === 'regression')
+    } else if (determineProblemType(dat[0][yvar]) === 'regression') {
       // construct a lookup table by id so we can correctly merge with our data
       for (let i = 0; i < data.length; i += 1) {
         // for some reason 'data' doesn't have 'd3mIndex' (why?) so treat 'i' as index
@@ -310,6 +333,7 @@ StepModelResults.propTypes = {
 const mapStateToProps = state => (
   {
     data: state.activeData.data,
+    exploreYVar: state.exploreYVar,
     pdata: state.executedPipelines,
     meta: state.metadata.data,
     problems: state.problems.data,
