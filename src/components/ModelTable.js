@@ -46,23 +46,33 @@ class ModelTable extends React.Component {
     const rocsMin = rocs[0];
     const rocsMax = rocs[rocs.length - 1];
 
+    // console.log('rocs:');
+    // console.log(rocs);
+
     // const currentlyExecutedIds = Object.keys(window.__pipepredictcache__);
     const currentlyExecutedIds = this.props.state.executedPipelines.data.map(d => d.pipeline.solution_id);
 
+    dat.sort((a, b) => (b.internalScore > a.internalScore ? -1 : 1));
+
     const tableDat = dat.map((d, i) => {
-      const val = d.internalScore;
-      const width = (((val - rocsMin) / (rocsMax - rocsMin)) * 50) + 50;
+      // const val = d.internalScore;
+      // const width = (((val - rocsMin) / (rocsMax - rocsMin)) * 50) + 50;
+      const width = (i / dat.length) * 100;
+
       const disableButton = currentlyExecutedIds.indexOf(d.solutionId) === -1;
 
       let btn = '';
-      console.log(d.solutionId);
+      // console.log(d.solutionId);
+
       const expIdx = this.props.exportedPipelines.indexOf(d.solutionId);
       if (expIdx > -1) {
         btn = (
           <span>
             Exported
             <br />
-            (rank {expIdx + 1})
+            (rank
+            {expIdx + 1}
+            )
           </span>
         );
       } else {
@@ -82,17 +92,17 @@ class ModelTable extends React.Component {
       return ({
         id: i,
         PIPELINE: d.solutionId,
-        ROC_AUC: d.internalScore,
+        SCORE: d.internalScore,
         RANK: (<span className={props.classes.tableGraph} style={{ width }} />),
         EXPORT: btn
       });
     });  // end of tableDat definition
 
-    tableDat.sort((a, b) => (b.ROC_AUC < a.ROC_AUC ? -1 : 1));
+    tableDat.sort((a, b) => (b.SCORE < a.SCORE ? -1 : 1));
 
     this.state = {
       order: 'desc',
-      orderBy: 'ROC_AUC',
+      orderBy: 'SCORE',
       data: tableDat,
       page: 0,
       rowsPerPage: 5
@@ -210,7 +220,7 @@ class ModelTable extends React.Component {
                       />
                     </TableCell>
                     <TableCell padding="none">{n.PIPELINE}</TableCell>
-                    <TableCell numeric>{n.ROC_AUC}</TableCell>
+                    <TableCell numeric>{n.SCORE.toFixed(2)}</TableCell>
                     <TableCell>{n.RANK}</TableCell>
                     <TableCell>{n.EXPORT}</TableCell>
                   </TableRow>

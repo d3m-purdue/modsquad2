@@ -78,7 +78,7 @@ class ModelTableHead extends React.Component {
                 <TableSortLabel
                   active={orderBy === column.id}
                   direction={order}
-                  onClick={this.createSortHandler(column.id)}
+                  onClick={this.createSortHandler(column.id === 'RANK' ? 'SCORE' : column.id)}
                   className={this.props.classes.header}
                 >
                   {column.label}
